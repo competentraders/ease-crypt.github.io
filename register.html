@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Registration Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Continuous background fading loop animation */
+    @keyframes cryptoFade {
+      0% { opacity: 0.35; transform: scale(1); }
+      50% { opacity: 0.15; transform: scale(1.05); }
+      100% { opacity: 0.35; transform: scale(1); }
+    }
+
+    .crypto-bg-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      /* High-quality cinematic cryptocurrency asset cluster configuration */
+      background-image: url('https://images.unsplash.com/photo-1621761191319-c6fb62004040?q=80&w=1920&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      z-index: -1;
+      animation: cryptoFade 12s infinite ease-in-out;
+    }
+
+    /* Track webkit scrollbars for long input cards cleanly */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+
+    /* Live checklist requirement status indicator defaults */
+    .requirement-item {
+      color: #64748b;
+      font-size: 0.78rem;
+      transition: color 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .requirement-item.valid {
+      color: #34d399;
+    }
+    .requirement-item.valid i {
+      color: #10b981;
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #060913; color: #f8fafc; min-height: 100vh; display: flex; align-items: center; justify-content: center; box-sizing: border-box;">
+
+  <div class="crypto-bg-layer"></div>
+
+  <div style="width: 100%; max-width: 540px; margin: 40px 16px; background-color: rgba(15, 23, 42, 0.93); border: 1px solid rgba(51, 65, 85, 0.7); border-radius: 16px; padding: 32px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); box-sizing: border-box; backdrop-filter: blur(8px);">
+    
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h2 style="margin: 0; font-size: 1.6rem; color: #f1f5f9; font-weight: 700; letter-spacing: -0.3px;">Create Account</h2>
+      <p style="margin: 6px 0 0 0; font-size: 0.85rem; color: #94a3b8;">Provide your database registration specifications below</p>
+    </div>
+
+    <div id="custom-alert-banner" style="display: none; padding: 12px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 500; margin-bottom: 20px; line-height: 1.4;"></div>
+
+    <form id="public-registration-form" onsubmit="executePublicRegistration(event)">
+      
+      <div style="display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 200px;">
+          <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">First Name</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-user" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
+            <input type="text" id="user-first-name" required style="width: 100%; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 11px 12px 11px 36px; color: #f8fafc; font-size: 0.88rem; box-sizing: border-box; outline: none;" placeholder="John">
+          </div>
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+          <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Last Name</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-user" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
+            <input type="text" id="user-last-name" required style="width: 100%; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 11px 12px 11px 36px; color: #f8fafc; font-size: 0.88rem; box-sizing: border-box; outline: none;" placeholder="Doe">
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Username for Login</label>
+        <div style="position: relative;">
+          <i class="fa-solid fa-at" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
+          <input type="text" id="user-login-id" required style="width: 100%; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 11px 12px 11px 36px; color: #f8fafc; font-size: 0.88rem; box-sizing: border-box; outline: none;" placeholder="choose_username">
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 200px;">
+          <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Email Address</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-envelope" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
+            <input type="email" id="user-email" required style="width: 100%; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 11px 12px 11px 36px; color: #f8fafc; font-size: 0.88rem; box-sizing: border-box; outline: none;" placeholder="name@example.com">
+          </div>
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+          <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Confirm Email</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-circle-check" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
+            <input type="email" id="user-email-confirm" required style="width: 100%; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 11px 12px 11px 36px; color: #f8fafc; font-size: 0.88rem; box-sizing: border-box; outline: none;" placeholder="Retype email address">
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 200px;">
+          <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Password</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-lock" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
+            <input type="password" id="user-secret-pass" oninput="evaluatePasswordLive()" required style="width: 100%; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 11px 40px 11px 36px; color: #f8fafc; font-size: 0.88rem; box-sizing: border-box; outline: none;" placeholder="••••••••">
+            <i class="fa-solid fa-eye-slash" id="toggle-pass-primary" onclick="togglePasswordVisibility('user-secret-pass', 'toggle-pass-primary')" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.9rem; cursor: pointer;"></i>
+          </div>
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+          <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Confirm Password</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-key" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
+            <input type="password" id="user-secret-pass-confirm" required style="width: 100%; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 11px 40px 11px 36px; color: #f8fafc; font-size: 0.88rem; box-sizing: border-box; outline: none;" placeholder="Retype password">
+            <i class="fa-solid fa-eye-slash" id="toggle-pass-secondary" onclick="togglePasswordVisibility('user-secret-pass-confirm', 'toggle-pass-secondary')" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.9rem; cursor: pointer;"></i>
+          </div>
+        </div>
+      </div>
+
+      <div style="background-color: rgba(30, 41, 59, 0.5); border: 1px solid #1e293b; border-radius: 8px; padding: 12px 14px; margin-bottom: 20px;">
+        <p style="margin: 0 0 8px 0; font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3px;">Security Validation Steps:</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 6px 16px;">
+          <div id="chk-length" class="requirement-item"><i class="fa-regular fa-circle"></i> 8+ Characters minimum</div>
+          <div id="chk-upper" class="requirement-item"><i class="fa-regular fa-circle"></i> Capital Letter (A-Z)</div>
+          <div id="chk-lower" class="requirement-item"><i class="fa-regular fa-circle"></i> Lowercase Letter (a-z)</div>
+          <div id="chk-number" class="requirement-item"><i class="fa-regular fa-circle"></i> Numeric Digit (0-9)</div>
+          <div id="chk-special" class="requirement-item"><i class="fa-regular fa-circle"></i> Special Character (!@#$)</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 200px;">
+          <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Gender</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-venus-mars" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
+            <select id="user-gender" required style="width: 100%; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 11px 12px 11px 36px; color: #f8fafc; font-size: 0.88rem; box-sizing: border-box; outline: none; appearance: none; cursor: pointer;">
+              <option value="" disabled selected hidden>Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+            <i class="fa-solid fa-chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.75rem; pointer-events: none;"></i>
+          </div>
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+          <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Date of Birth</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-calendar-days" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
+            <input type="date" id="user-birthdate" required style="width: 100%; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 11px 12px 11px 36px; color: #f8fafc; font-size: 0.88rem; box-sizing: border-box; outline: none; color-scheme: dark;">
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" style="width: 100%; background-color: #38bdf8; color: #0f172a; border: none; padding: 13px; border-radius: 8px; font-size: 0.92rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <span>Register Account</span> <i class="fa-solid fa-arrow-right"></i>
+      </button>
+
+    </form>
+  </div>
+
+  <script>
+    // Toggle standard string rendering states for hidden characters
+    function togglePasswordVisibility(inputFieldId, iconId) {
+      const field = document.getElementById(inputFieldId);
+      const icon = document.getElementById(iconId);
+      
+      if (field.type === "password") {
+        field.type = "text";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+        icon.style.color = "#38bdf8"; // Highlight color when eye is open
+      } else {
+        field.type = "password";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+        icon.style.color = "#64748b";
+      }
+    }
+
+    // Dynamic step verification UI visual feedback mapping
+    function evaluatePasswordLive() {
+      const password = document.getElementById("user-secret-pass").value;
+
+      const validations = {
+        "chk-length": password.length >= 8,
+        "chk-upper": /[A-Z]/.test(password),
+        "chk-lower": /[a-z]/.test(password),
+        "chk-number": /[0-9]/.test(password),
+        "chk-special": /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+      };
+
+      for (const [elementId, isValid] of Object.entries(validations)) {
+        const row = document.getElementById(elementId);
+        const icon = row.querySelector("i");
+        
+        if (isValid) {
+          row.classList.add("valid");
+          icon.className = "fa-solid fa-circle-check";
+        } else {
+          row.classList.remove("valid");
+          icon.className = "fa-regular fa-circle";
+        }
+      }
+    }
+
+    function triggerNotification(message, type = "error") {
+      const banner = document.getElementById("custom-alert-banner");
+      banner.style.display = "block";
+      
+      if (type === "error") {
+        banner.style.backgroundColor = "rgba(239, 68, 68, 0.12)";
+        banner.style.color = "#f87171";
+        banner.style.border = "1px solid rgba(239, 68, 68, 0.25)";
+      } else {
+        banner.style.backgroundColor = "rgba(16, 185, 129, 0.12)";
+        banner.style.color = "#34d399";
+        banner.style.border = "1px solid rgba(16, 185, 129, 0.25)";
+      }
+      
+      banner.innerHTML = message;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function executePublicRegistration(event) {
+      event.preventDefault();
+      document.getElementById("custom-alert-banner").style.display = "none";
+
+      const firstName = document.getElementById("user-first-name").value.trim();
+      const lastName = document.getElementById("user-last-name").value.trim();
+      const usernameField = document.getElementById("user-login-id");
+      const email = document.getElementById("user-email").value.trim();
+      const emailConfirm = document.getElementById("user-email-confirm").value.trim();
+      const password = document.getElementById("user-secret-pass").value;
+      const passwordConfirm = document.getElementById("user-secret-pass-confirm").value;
+      const gender = document.getElementById("user-gender").value;
+      const birthdate = document.getElementById("user-birthdate").value;
+
+      // Verification checks: Emails
+      if (email !== emailConfirm) {
+        triggerNotification("<i class='fa-solid fa-triangle-exclamation'></i> <strong>Verification Conflict:</strong> Email confirmation entries do not match.");
+        return;
+      }
+
+      // Verification checks: Passwords match
+      if (password !== passwordConfirm) {
+        triggerNotification("<i class='fa-solid fa-triangle-exclamation'></i> <strong>Verification Conflict:</strong> Password confirmation entries do not match.");
+        return;
+      }
+
+      // Explicit gate validation blocking processing engine on strength deficiency
+      const minLength = password.length >= 8;
+      const hasUppercase = /[A-Z]/.test(password);
+      const hasLowercase = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+
+      if (!minLength || !hasUppercase || !hasLowercase || !hasNumber || !hasSpecial) {
+        triggerNotification("<i class='fa-solid fa-shield-halved'></i> <strong>Security Failure:</strong> Your chosen password does not fulfill all core validation steps listed below.");
+        return;
+      }
+
+      const systemDatabase = JSON.parse(localStorage.getItem("app_user_database")) || [];
+      const usernameAttempt = usernameField.value.trim().toLowerCase();
+      const accountExists = systemDatabase.some(account => account.username.toLowerCase() === usernameAttempt);
+
+      if (accountExists) {
+        triggerNotification("<i class='fa-solid fa-circle-exclamation'></i> <strong>Database Conflict:</strong> This username is already registered. Please choose another.");
+        return;
+      }
+
+      const currentMoment = new Date();
+      const formatTimestamp = currentMoment.toISOString().slice(0, 10) + " " + currentMoment.toTimeString().slice(0, 5);
+
+      const comprehensiveProfileRecord = {
+        uid: "acc_" + Date.now(),
+        timestamp: formatTimestamp,
+        firstName: firstName,
+        lastName: lastName,
+        fullName: firstName + " " + lastName,
+        username: usernameField.value.trim(),
+        email: email,
+        password: password,
+        gender: gender,
+        birthdate: birthdate,
+        status: "Pending"
+      };
+
+      systemDatabase.push(comprehensiveProfileRecord);
+      localStorage.setItem("app_user_database", JSON.stringify(systemDatabase));
+
+      triggerNotification("<strong>Success!</strong> Account data queued in verification ledger. Redirecting to login context...", "success");
+
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

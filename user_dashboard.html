@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Financial Management Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #0b0f19; color: #f8fafc; min-height: 100vh; box-sizing: border-box;">
+
+  <nav style="background-color: #0f172a; border-bottom: 1px solid #1e293b; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 36px; height: 36px; background-color: rgba(56, 189, 248, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+        <i class="fa-solid fa-chart-line" style="color: #38bdf8; font-size: 1.1rem;"></i>
+      </div>
+      <h1 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #f1f5f9; letter-spacing: -0.3px;">CryptoPulse Portal</h1>
+    </div>
+    
+    <button onclick="terminateUserSession()" style="background-color: rgba(239, 68, 68, 0.08); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s;">
+      <i class="fa-solid fa-right-from-bracket"></i> <span>Log Out</span>
+    </button>
+  </nav>
+
+  <main style="max-width: 1200px; margin: 32px auto; padding: 0 16px; box-sizing: border-box;">
+    
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1px solid #334155; border-radius: 16px; padding: 24px; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);">
+      <h2 style="margin: 0; font-size: 1.4rem; color: #38bdf8; font-weight: 700;">Welcome Back, <span id="dash-display-fullname">User</span>!</h2>
+      <p style="margin: 4px 0 0 0; font-size: 0.88rem; color: #94a3b8;">Your account state metrics have passed system network clearance protocols.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+      
+      <div style="background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <h3 style="margin: 0 0 18px 0; font-size: 1.05rem; color: #f1f5f9; border-bottom: 1px solid #1e293b; padding-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-id-card" style="color: #64748b;"></i> Database Profile Metrics
+        </h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div>
+            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Account Username</span>
+            <span id="dash-meta-username" style="font-size: 0.92rem; color: #f8fafc; font-weight: 500;">-</span>
+          </div>
+          <div>
+            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Registered Email Node</span>
+            <span id="dash-meta-email" style="font-size: 0.92rem; color: #f8fafc; font-weight: 500;">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+            <div style="flex: 1;">
+              <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Gender Group</span>
+              <span id="dash-meta-gender" style="font-size: 0.92rem; color: #f8fafc; font-weight: 500;">-</span>
+            </div>
+            <div style="flex: 1;">
+              <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Date of Birth</span>
+              <span id="dash-meta-birth" style="font-size: 0.92rem; color: #f8fafc; font-weight: 500; font-family: monospace;">-</span>
+            </div>
+          </div>
+          <div>
+            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Internal Record Identifier</span>
+            <span id="dash-meta-uid" style="font-size: 0.8rem; color: #38bdf8; font-family: monospace;">-</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <h3 style="margin: 0 0 18px 0; font-size: 1.05rem; color: #f1f5f9; border-bottom: 1px solid #1e293b; padding-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-wallet" style="color: #64748b;"></i> Live Market Feeds
+        </h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          
+          <div style="background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <i class="fa-brands fa-bitcoin" style="color: #f59e0b; font-size: 1.5rem;"></i>
+              <div>
+                <h4 style="margin: 0; font-size: 0.88rem; color: #f1f5f9; font-weight: 600;">Bitcoin</h4>
+                <p style="margin: 0; font-size: 0.72rem; color: #64748b;">BTC / USD</p>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <p style="margin: 0; font-size: 0.9rem; color: #f8fafc; font-weight: 700;">$94,235.50</p>
+              <p style="margin: 0; font-size: 0.72rem; color: #10b981; font-weight: 600;">+4.25% <i class="fa-solid fa-caret-up"></i></p>
+            </div>
+          </div>
+
+          <div style="background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <i class="fa-brands fa-ethereum" style="color: #6366f1; font-size: 1.5rem;"></i>
+              <div>
+                <h4 style="margin: 0; font-size: 0.88rem; color: #f1f5f9; font-weight: 600;">Ethereum</h4>
+                <p style="margin: 0; font-size: 0.72rem; color: #64748b;">ETH / USD</p>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <p style="margin: 0; font-size: 0.9rem; color: #f8fafc; font-weight: 700;">$3,412.18</p>
+              <p style="margin: 0; font-size: 0.72rem; color: #10b981; font-weight: 600;">+1.82% <i class="fa-solid fa-caret-up"></i></p>
+            </div>
+          </div>
+
+          <div style="background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 24px; height: 24px; background-color: #14f195; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 0.7rem; font-weight: 900;">S</div>
+              <div>
+                <h4 style="margin: 0; font-size: 0.88rem; color: #f1f5f9; font-weight: 600;">Solana</h4>
+                <p style="margin: 0; font-size: 0.72rem; color: #64748b;">SOL / USD</p>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <p style="margin: 0; font-size: 0.9rem; color: #f8fafc; font-weight: 700;">$184.65</p>
+              <p style="margin: 0; font-size: 0.72rem; color: #ef4444; font-weight: 600;">-0.48% <i class="fa-solid fa-caret-down"></i></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // System Guard Protocol Execution
+    function parseSecureUserContext() {
+      // Pull token tracking assignment out of localized storage environment allocation
+      const currentUserData = JSON.parse(localStorage.getItem("authenticated_current_user"));
+
+      // Intercept execution pathways if authentication profile tokens fail verification
+      if (!currentUserData) {
+        // Kick unverified connection profiles directly back out to login interface
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Populate layout document tokens smoothly with the database profile data array
+      document.getElementById("dash-display-fullname").textContent = currentUserData.fullName || (currentUserData.firstName + " " + currentUserData.lastName);
+      document.getElementById("dash-meta-username").textContent = "@" + currentUserData.username;
+      document.getElementById("dash-meta-email").textContent = currentUserData.email;
+      document.getElementById("dash-meta-gender").textContent = currentUserData.gender;
+      document.getElementById("dash-meta-birth").textContent = currentUserData.birthdate;
+      document.getElementById("dash-meta-uid").textContent = currentUserData.uid;
+    }
+
+    // Handles log out sequence cleanly
+    function terminateUserSession() {
+      // Clear current authentication instance variables from runtime environment safely
+      localStorage.removeItem("authenticated_current_user");
+      // Forward the browser sequence context target backwards smoothly
+      window.location.href = "login.html";
+    }
+
+    // Initialize parsing logic immediately when DOM elements are constructed
+    document.addEventListener("DOMContentLoaded", parseSecureUserContext);
+  </script>
+</body>
+</html>

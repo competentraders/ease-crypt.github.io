@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Administrative Database Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #0b0f19; color: #f8fafc; min-height: 100vh; padding: 30px 16px; box-sizing: border-box;">
+
+  <div style="width: 100%; max-width: 1200px; margin: 0 auto; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 28px; box-shadow: 0 20px 45px rgba(0,0,0,0.6); box-sizing: border-box;">
+    
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 20px; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <h2 style="margin: 0; font-size: 1.45rem; color: #38bdf8; font-weight: 700; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-database"></i> Secure Administration Database
+        </h2>
+        <p style="margin: 4px 0 0 0; font-size: 0.82rem; color: #64748b;">Review incoming profiles, check user validation states, and accept network access requests</p>
+      </div>
+      
+      <button onclick="purgeSystemCacheData()" style="background-color: rgba(239, 68, 68, 0.08); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+        <i class="fa-solid fa-trash-can" style="margin-right: 4px;"></i> Wipe Local Tables
+      </button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px;">
+      
+      <div style="background-color: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 16px; display: flex; align-items: center; gap: 14px;">
+        <div style="width: 42px; height: 42px; background-color: rgba(56, 189, 248, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-users" style="color: #38bdf8; font-size: 1.2rem;"></i>
+        </div>
+        <div>
+          <p style="margin: 0; font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Total Accounts</p>
+          <h3 id="stat-total-users" style="margin: 2px 0 0 0; font-size: 1.3rem; color: #f8fafc; font-weight: 700;">0</h3>
+        </div>
+      </div>
+
+      <div style="background-color: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 16px; display: flex; align-items: center; gap: 14px;">
+        <div style="width: 42px; height: 42px; background-color: rgba(245, 158, 11, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-clock-rotate-left" style="color: #f59e0b; font-size: 1.2rem;"></i>
+        </div>
+        <div>
+          <p style="margin: 0; font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Pending Approval</p>
+          <h3 id="stat-pending-users" style="margin: 2px 0 0 0; font-size: 1.3rem; color: #f59e0b; font-weight: 700;">0</h3>
+        </div>
+      </div>
+
+      <div style="background-color: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 16px; display: flex; align-items: center; gap: 14px;">
+        <div style="width: 42px; height: 42px; background-color: rgba(16, 185, 129, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 1.2rem;"></i>
+        </div>
+        <div>
+          <p style="margin: 0; font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Active Authorized Nodes</p>
+          <h3 id="stat-approved-users" style="margin: 2px 0 0 0; font-size: 1.3rem; color: #10b981; font-weight: 700;">0</h3>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="width: 100%; overflow-x: auto; border: 1px solid #1e293b; border-radius: 10px; background-color: #0b1329;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.86rem; min-width: 1000px;">
+        <thead>
+          <tr style="background-color: #111a2e; border-bottom: 1px solid #1e293b;">
+            <th style="padding: 14px 12px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px;">Timestamp</th>
+            <th style="padding: 14px 12px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px;">Legal Profile Name</th>
+            <th style="padding: 14px 12px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px;">Username</th>
+            <th style="padding: 14px 12px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px;">Email Node</th>
+            <th style="padding: 14px 12px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px;">Gender</th>
+            <th style="padding: 14px 12px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px;">Date of Birth</th>
+            <th style="padding: 14px 12px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px;">Validation Status</th>
+            <th style="padding: 14px 12px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px; text-align: right;">Authorization Controls</th>
+          </tr>
+        </thead>
+        <tbody id="admin-table-records-target">
+          </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    // Access centralized storage allocation channels safely
+    function fetchStorageData() {
+      return JSON.parse(localStorage.getItem("app_user_database")) || [];
+    }
+
+    // Commits matrix arrays down to browser data layer
+    function saveStorageData(updatedMatrix) {
+      localStorage.setItem("app_user_database", JSON.stringify(updatedMatrix));
+      paintDatabaseLedgerView();
+    }
+
+    // Action Gate: Switches a specific user configuration status to 'Approved'
+    function processApprovalDecision(targetUid) {
+      const liveData = fetchStorageData();
+      const updatedData = liveData.map(account => {
+        if (account.uid === targetUid) {
+          account.status = "Approved";
+        }
+        return account;
+      });
+      saveStorageData(updatedData);
+    }
+
+    // Action Gate: Drops target user completely out of memory scope 
+    function processRevocationDecision(targetUid) {
+      if (confirm("Confirm system command? This registration record will be permanently deleted from database tables.")) {
+        const liveData = fetchStorageData();
+        const filteredData = liveData.filter(account => account.uid !== targetUid);
+        saveStorageData(filteredData);
+      }
+    }
+
+    // Maintenance Gate: Erases global tracking allocations completely
+    function purgeSystemCacheData() {
+      if (confirm("CRITICAL OPERATIONS WARNING: You are about to flush all records from the database. This action is irreversible. Proceed?")) {
+        saveStorageData([]);
+      }
+    }
+
+    // Loops arrays, evaluates metrics, and prints structured document elements
+    function paintDatabaseLedgerView() {
+      const displayGridTarget = document.getElementById("admin-table-records-target");
+      const activeRecords = fetchStorageData();
+
+      // UI Summary Card Counters elements references
+      const totalCounterEl = document.getElementById("stat-total-users");
+      const pendingCounterEl = document.getElementById("stat-pending-users");
+      const approvedCounterEl = document.getElementById("stat-approved-users");
+
+      // Compute status analytics calculations
+      const totalCount = activeRecords.length;
+      const pendingCount = activeRecords.filter(acc => acc.status === "Pending").length;
+      const approvedCount = activeRecords.filter(acc => acc.status === "Approved").length;
+
+      // Print metrics values to top blocks
+      totalCounterEl.textContent = totalCount;
+      pendingCounterEl.textContent = pendingCount;
+      approvedCounterEl.textContent = approvedCount;
+
+      // Clear layout body frame safely before paint loop execution
+      displayGridTarget.innerHTML = "";
+
+      if (totalCount === 0) {
+        displayGridTarget.innerHTML = `
+          <tr>
+            <td colspan="8" style="padding: 40px 12px; text-align: center; color: #475569; font-style: italic; font-size: 0.9rem;">
+              No accounts found in database tables. Waiting for user registration inputs...
+            </td>
+          </tr>`;
+        return;
+      }
+
+      // Reverse iteration ensures newly created user requests display at the absolute top of the index list
+      activeRecords.slice().reverse().forEach(account => {
+        const rowElement = document.createElement("tr");
+        rowElement.style.borderBottom = "1px solid #1e293b";
+        rowElement.style.backgroundColor = "transparent";
+
+        // Generate context-aware structural visual tags for accounts tracking state
+        let indicatorStyle = "padding: 4px 8px; border-radius: 4px; font-weight: 700; font-size: 0.68rem; text-transform: uppercase; tracking: 0.5px; display: inline-block;";
+        if (account.status === "Approved") {
+          indicatorStyle += "background-color: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);";
+        } else {
+          indicatorStyle += "background-color: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2);";
+        }
+
+        // Context-aware conditional operation buttons execution slot configuration
+        const contextualActionSlot = account.status === "Pending"
+          ? `<button onclick="processApprovalDecision('${account.uid}')" style="background-color: #10b981; color: #0f172a; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; margin-right: 8px; box-shadow: 0 2px 6px rgba(16,185,129,0.2);">Accept</button>`
+          : `<span style="color: #64748b; font-size: 0.78rem; font-weight: 600; margin-right: 14px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-circle-check" style="color: #10b981;"></i> Active Node</span>`;
+
+        // Extraction protocols for complex parameters mapping
+        const accountFullName = account.fullName || ((account.firstName || '') + ' ' + (account.lastName || '')).trim() || 'Unspecified';
+        const accountEmail = account.email || 'N/A';
+        const accountGender = account.gender || 'N/A';
+        const accountBirth = account.birthdate || 'N/A';
+
+        rowElement.innerHTML = `
+          <td style="padding: 14px 12px; color: #64748b; font-family: monospace; font-size: 0.8rem;">${account.timestamp}</td>
+          <td style="padding: 14px 12px; color: #f1f5f9; font-weight: 600;">${accountFullName}</td>
+          <td style="padding: 14px 12px; color: #38bdf8; font-weight: 500;">@${account.username}</td>
+          <td style="padding: 14px 12px; color: #94a3b8;">${accountEmail}</td>
+          <td style="padding: 14px 12px; color: #cbd5e1;">${accountGender}</td>
+          <td style="padding: 14px 12px; color: #cbd5e1; font-family: monospace;">${accountBirth}</td>
+          <td style="padding: 14px 12px;"><span style="${indicatorStyle}">${account.status}</span></td>
+          <td style="padding: 14px 12px; text-align: right; white-space: nowrap;">
+            ${contextualActionSlot}
+            <button onclick="processRevocationDecision('${account.uid}')" style="background-color: rgba(239, 68, 68, 0.05); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.15); padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">Delete</button>
+          </td>
+        `;
+
+        displayGridTarget.appendChild(rowElement);
+      });
+    }
+
+    // Trigger visual build immediately once DOM engine fires ready signals
+    document.addEventListener("DOMContentLoaded", paintDatabaseLedgerView);
+  </script>
+</body>
+</html>
