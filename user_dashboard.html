@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Enterprise Asset Management Dashboard</title>
-  <!-- FontAwesome CDN for structural graphics support -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* Premium Sliding Drawer Animation Classes */
@@ -33,7 +32,7 @@
       height: 100%;
       background-color: rgba(2, 6, 23, 0.7);
       backdrop-filter: blur(4px);
-      z-index: 999;.
+      z-index: 999;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease;
@@ -60,10 +59,8 @@
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #060913; color: #f8fafc; min-height: 100vh; box-sizing: border-box;">
 
-  <!-- Sliding Drawer Overlay Background Guard -->
   <div id="menu-overlay" class="drawer-overlay" onclick="toggleCryptoMenu()"></div>
 
-  <!-- Hamburger Sliding Asset Container Panel Drawer -->
   <div id="crypto-drawer" class="hamburger-drawer">
     <div style="padding: 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center;">
       <div style="display: flex; align-items: center; gap: 8px;">
@@ -73,7 +70,6 @@
       <button onclick="toggleCryptoMenu()" style="background: none; border: none; color: #64748b; cursor: pointer; font-size: 1.2rem;"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
-    <!-- Search Input Engine Form Field -->
     <div style="padding: 16px; border-bottom: 1px solid #1e293b; background-color: #0b0f19;">
       <div style="position: relative;">
         <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
@@ -81,16 +77,12 @@
       </div>
     </div>
 
-    <!-- Live Dynamic Token Injection Hub Container -->
     <div id="crypto-grid" class="custom-scroll" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
-      <!-- JavaScript asset payloads inject dynamically here -->
-    </div>
+      </div>
   </div>
 
-  <!-- Main Sticky Structural Top Header Control Layout -->
   <nav style="background-color: #0f172a; border-bottom: 1px solid #1e293b; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 900;">
     <div style="display: flex; align-items: center; gap: 18px;">
-      <!-- Interactive Navigation Menu Toggle Bar Hook -->
       <button onclick="toggleCryptoMenu()" style="background-color: #1e293b; border: 1px solid #334155; color: #f1f5f9; padding: 10px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.85rem; transition: background 0.2s;">
         <i class="fa-solid fa-bars" style="font-size: 1rem; color: #38bdf8;"></i> <span>View Token Discounts</span>
       </button>
@@ -102,16 +94,13 @@
       </div>
     </div>
     
-    <!-- Account Invalidation Explicit Trigger Outlets -->
     <button onclick="terminateUserSession()" style="background-color: rgba(239, 68, 68, 0.08); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s;">
       <i class="fa-solid fa-right-from-bracket"></i> <span>Log Out</span>
     </button>
   </nav>
 
-  <!-- Central Main Grid Configuration Scope Shell Frame -->
   <main style="max-width: 1200px; margin: 32px auto; padding: 0 16px; box-sizing: border-box;">
     
-    <!-- User Interactive Welcome Card Framework Panel -->
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1px solid #334155; border-radius: 16px; padding: 28px; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
       <div>
         <h2 style="margin: 0; font-size: 1.6rem; color: #ffffff; font-weight: 800; letter-spacing: -0.4px;">Welcome Back, <span id="dash-display-fullname" style="color: #38bdf8;">User</span>!</h2>
@@ -123,13 +112,10 @@
       </div>
     </div>
 
-    <!-- Core Interactive Dual Section Data Split Configuration Layout -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 32px; align-items: start;">
       
-      <!-- LEFT BLOCK: Asset Balance Node Array Component Cards -->
       <div style="display: flex; flex-direction: column; gap: 24px;">
         
-        <!-- Live Available Investment Valuation Balance Display Block Card -->
         <div style="background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 24px; box-shadow: 0 12px 24px rgba(0,0,0,0.25); position: relative; overflow: hidden;">
           <div style="position: absolute; right: -20px; bottom: -20px; font-size: 8rem; color: rgba(51, 65, 85, 0.12); pointer-events: none; z-index: 1;"><i class="fa-solid fa-vault"></i></div>
           <div style="position: relative; z-index: 2;">
@@ -142,7 +128,6 @@
           </div>
         </div>
 
-        <!-- System Platform Incentives Onboarding Bonus Node Card -->
         <div style="background-color: #0f172a; border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 24px; box-shadow: 0 12px 24px rgba(0,0,0,0.25); position: relative; overflow: hidden;">
           <div style="position: absolute; right: -15px; bottom: -15px; font-size: 7rem; color: rgba(56, 189, 248, 0.04); pointer-events: none; z-index: 1;"><i class="fa-solid fa-gift"></i></div>
           <div style="position: relative; z-index: 2;">
@@ -157,7 +142,6 @@
 
       </div>
 
-      <!-- RIGHT BLOCK: Demographics Matrix Profile Parameter Storage Card Container -->
       <div style="background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 28px; box-shadow: 0 12px 24px rgba(0,0,0,0.25);">
         <h3 style="margin: 0 0 20px 0; font-size: 1.1rem; color: #f1f5f9; border-bottom: 1px solid #1e293b; padding-bottom: 12px; display: flex; align-items: center; gap: 10px;">
           <i class="fa-solid fa-user-gear" style="color: #64748b;"></i> Authenticated Profile Core Metadata
@@ -193,9 +177,7 @@
 
   </main>
 
-  <!-- Runtime Structural Operations Script Engine Array -->
   <script>
-    // Cleaned production array featuring exclusively legitimate, exchange-listed digital assets
     const cryptoAssets = [
         { id: 1, name: "Bitcoin", ticker: "BTC", basePrice: 64200.00, icon: "fa-brands fa-bitcoin", color: "#f59e0b" },
         { id: 2, name: "Tether", ticker: "USDT", basePrice: 1.00, icon: "fa-solid fa-dollar-sign", color: "#10b981" },
@@ -267,12 +249,10 @@
         { id: 68, name: "Aelement", ticker: "AELF", basePrice: 0.38, icon: "fa-solid fa-dna", color: "#2b61d6" }
     ];
 
-    // Fixed mathematical margin mapping derived directly from your $65,000 spot vs $61,000 retail logic
-    const SPREAD_MARGIN_RATE = (65000 - 61000) / 65000; // ~0.061538 (6.15% discount profile)
+    const SPREAD_MARGIN_RATE = (65000 - 61000) / 65000;
     const gridContainer = document.getElementById('crypto-grid');
     let lastFilterString = "";
 
-    // Toggle sliding navigation panel visualization matrix
     function toggleCryptoMenu() {
       const drawer = document.getElementById("crypto-drawer");
       const overlay = document.getElementById("menu-overlay");
@@ -280,7 +260,6 @@
       overlay.classList.toggle("visible");
     }
 
-    // Render Matrix Card Output Lists inside Hamburger drawer
     function renderMatrixCards(filterString = lastFilterString) {
       lastFilterString = filterString;
       gridContainer.innerHTML = "";
@@ -303,7 +282,6 @@
         if (token.basePrice < 0.01) formattingPrecision = 4;
         if (token.basePrice < 0.0001) formattingPrecision = 8;
 
-        // Construct HTML card framework element node safely
         const tokenItem = document.createElement("div");
         tokenItem.style.backgroundColor = "#1e293b";
         tokenItem.style.border = "1px solid #334155";
@@ -327,45 +305,4 @@
           <div style="text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: flex-end;">
             <div style="font-size: 0.88rem; color: #10b981; font-weight: 700;">$${discountPrice.toFixed(formattingPrecision)}</div>
             <div style="font-size: 0.7rem; color: #64748b; text-decoration: line-through;">$${spotPrice.toFixed(formattingPrecision)}</div>
-            <a href="deposit.html" style="background-color: #38bdf8; color: #0f172a; text-decoration: none; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; margin-top: 2px;">
-              Buy <i class="fa-solid fa-cart-shopping" style="font-size: 0.65rem;"></i>
-            </a>
-          </div>
-        `;
-        gridContainer.appendChild(tokenItem);
-      });
-    }
-
-    // System Guard Context Initialization Protocol
-    function parseSecureUserContext() {
-      const currentUserData = JSON.parse(localStorage.getItem("authenticated_current_user"));
-
-      // Route invalid access configurations safely out of active layout limits
-      if (!currentUserData) {
-        window.location.href = "login.html";
-        return;
-      }
-
-      // Populate layout text fields efficiently using retrieved session state properties
-      document.getElementById("dash-display-fullname").textContent = currentUserData.fullName || (currentUserData.firstName + " " + currentUserData.lastName);
-      document.getElementById("dash-meta-username").textContent = "@" + currentUserData.username;
-      document.getElementById("dash-meta-email").textContent = currentUserData.email;
-      document.getElementById("dash-meta-gender").textContent = currentUserData.gender;
-      document.getElementById("dash-meta-birth").textContent = currentUserData.birthdate;
-      document.getElementById("dash-meta-uid").textContent = currentUserData.uid;
-
-      // Populate card objects arrays initialization stack loops 
-      renderMatrixCards();
-    }
-
-    // Terminate local authentication instance values safely
-    function terminateUserSession() {
-      localStorage.removeItem("authenticated_current_user");
-      window.location.href = "login.html";
-    }
-
-    // Fire compilation sequences once framework tree finishes compilation state structures
-    document.addEventListener("DOMContentLoaded", parseSecureUserContext);
-  </script>
-</body>
-</html>
+            <a href="deposit.html" style="background-color: #38bdf8; color: #0f172a; text-decoration: none; font-size: 0.75rem
