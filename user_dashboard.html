@@ -22,7 +22,7 @@
       flex-direction: column;
     }
     .hamburger-drawer.open {
-      left: 0 !important; /* Forces the open class override */
+      left: 0 !important;
     }
     .drawer-overlay {
       position: fixed;
@@ -78,15 +78,15 @@
     
     /* Price update pulse animations */
     @keyframes priceUp {
-      0% { background-color: rgba(16, 185, 129, 0.2); }
-      100% { background-color: transparent; }
+      0% { color: #10b981; background-color: rgba(16, 185, 129, 0.15); }
+      100% { color: #10b981; background-color: transparent; }
     }
     @keyframes priceDown {
-      0% { background-color: rgba(239, 68, 68, 0.2); }
-      100% { background-color: transparent; }
+      0% { color: #ef4444; background-color: rgba(239, 68, 68, 0.15); }
+      100% { color: #ef4444; background-color: transparent; }
     }
-    .flash-up { animation: priceUp 0.8s ease-out; }
-    .flash-down { animation: priceDown 0.8s ease-out; }
+    .flash-up { animation: priceUp 0.6s ease-out; }
+    .flash-down { animation: priceDown 0.6s ease-out; }
   </style>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #060913; color: #f8fafc; min-height: 100vh; box-sizing: border-box;">
@@ -102,7 +102,6 @@
       <button onclick="toggleCryptoMenu()" style="background: none; border: none; color: #64748b; cursor: pointer; font-size: 1.2rem;"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
-    <!-- Real Financial Asset Categories Filters -->
     <div style="padding: 12px 16px; background-color: #0b0f19; border-bottom: 1px solid #1e293b; display: flex; gap: 8px; overflow-x: auto;" class="custom-scroll">
       <button class="market-tab active" id="tab-ALL" onclick="switchMarketTab('ALL')">All Markets</button>
       <button class="market-tab" id="tab-CRYPTO" onclick="switchMarketTab('CRYPTO')">Crypto</button>
@@ -142,261 +141,151 @@
 
   <main style="max-width: 1200px; margin: 32px auto; padding: 0 16px; box-sizing: border-box;">
     
-    <!-- Action Banner with Responsive Navigation Buttons -->
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1px solid #334155; border-radius: 16px; padding: 28px; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;">
-      
-      <!-- Greeting and Verification Status -->
       <div style="flex: 1; min-width: 280px;">
         <h2 style="margin: 0; font-size: 1.6rem; color: #ffffff; font-weight: 800; letter-spacing: -0.4px;">Welcome Back, <span id="dash-display-fullname" style="color: #38bdf8;">User</span>!</h2>
-        <p style="margin: 6px 0 0 0; font-size: 0.9rem; color: #94a3b8;">Your account Activated status: <span style="color: #10b981; font-weight: 600;">Verified Instant buy.</span></p>
+        <p style="margin: 6px 0 0 0; font-size: 0.9rem; color: #10b981; font-weight: 600;">Account Status: Verified Instant buy.</p>
       </div>
-
-      <!-- Horizontal Navigation Button Container -->
       <div style="display: flex; gap: 12px; min-width: 280px; width: auto; flex-wrap: nowrap; align-items: center;">
-        
-        <!-- Deposit Action Button -->
-        <a href="deposit.html" style="flex: 1; text-align: center; background-color: #38bdf8; color: #0f172a; text-decoration: none; font-size: 0.88rem; font-weight: 700; padding: 12px 20px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s, transform 0.1s; white-space: nowrap; border: 1px solid #38bdf8;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-          <i class="fa-solid fa-wallet" style="font-size: 0.95rem;"></i> <span>Deposit</span>
+        <a href="deposit.html" style="flex: 1; text-align: center; background-color: #38bdf8; color: #0f172a; text-decoration: none; font-size: 0.88rem; font-weight: 700; padding: 12px 20px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s; white-space: nowrap; border: 1px solid #38bdf8;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+          <i class="fa-solid fa-wallet"></i> <span>Deposit</span>
         </a>
-
-        <!-- Withdraw Action Button -->
-        <a href="withdraw.html" style="flex: 1; text-align: center; background-color: #1e293b; color: #f8fafc; text-decoration: none; font-size: 0.88rem; font-weight: 700; padding: 12px 20px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s, transform 0.1s; white-space: nowrap; border: 1px solid #334155;" onmouseover="this.style.backgroundColor='#334155'" onmouseout="this.style.backgroundColor='#1e293b'">
-          <i class="fa-solid fa-money-bill-transfer" style="font-size: 0.95rem; color: #38bdf8;"></i> <span>Withdraw</span>
+        <a href="withdraw.html" style="flex: 1; text-align: center; background-color: #1e293b; color: #f8fafc; text-decoration: none; font-size: 0.88rem; font-weight: 700; padding: 12px 20px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #334155;">
+          <i class="fa-solid fa-money-bill-transfer" style="color: #38bdf8;"></i> <span>Withdraw</span>
         </a>
-
-      </div>
-    </div>
-
-    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1px solid #334155; border-radius: 16px; padding: 20px; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
-      <div style="background-color: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.2); padding: 8px 16px; border-radius: 30px; display: flex; align-items: center; gap: 8px;">
-        <span style="width: 8px; height: 8px; background-color: #10b981; border-radius: 50%; display: inline-block;"></span>
-        <span style="font-size: 0.78rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">Live ease-crypt network Feed Active</span>
       </div>
     </div>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 32px; align-items: start;">
-      
       <div style="display: flex; flex-direction: column; gap: 24px;">
-        
-        <div style="background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 24px; box-shadow: 0 12px 24px rgba(0,0,0,0.25); position: relative; overflow: hidden;">
-          <div style="position: absolute; right: -20px; bottom: -20px; font-size: 8rem; color: rgba(51, 65, 85, 0.12); pointer-events: none; z-index: 1;"><i class="fa-solid fa-vault"></i></div>
+        <div style="background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 24px; position: relative; overflow: hidden;">
+          <div style="position: absolute; right: -20px; bottom: -20px; font-size: 8rem; color: rgba(51, 65, 85, 0.12); pointer-events: none;"><i class="fa-solid fa-vault"></i></div>
           <div style="position: relative; z-index: 2;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-              <i class="fa-solid fa-wallet" style="color: #64748b; font-size: 0.95rem;"></i>
+              <i class="fa-solid fa-wallet" style="color: #64748b;"></i>
               <span style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Live Account Balance</span>
             </div>
-            <h3 style="margin: 0; font-size: 2.3rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">$0.00</h3>
-            <p style="margin: 6px 0 0 0; font-size: 0.8rem; color: #475569;">Primary fiat/crypto combined custody volume allocation.</p>
+            <h3 style="margin: 0; font-size: 2.3rem; font-weight: 800; color: #ffffff;">$0.00</h3>
           </div>
         </div>
-
-        <div style="background-color: #0f172a; border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 24px; box-shadow: 0 12px 24px rgba(0,0,0,0.25); position: relative; overflow: hidden;">
-          <div style="position: absolute; right: -15px; bottom: -15px; font-size: 7rem; color: rgba(56, 189, 248, 0.04); pointer-events: none; z-index: 1;"><i class="fa-solid fa-gift"></i></div>
+        <div style="background-color: #0f172a; border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 24px; position: relative; overflow: hidden;">
           <div style="position: relative; z-index: 2;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-              <i class="fa-solid fa-circle-dollar-to-slot" style="color: #38bdf8; font-size: 0.95rem;"></i>
+              <i class="fa-solid fa-circle-dollar-to-slot" style="color: #38bdf8;"></i>
               <span style="font-size: 0.78rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">New User rewards</span>
             </div>
-            <h3 style="margin: 0; font-size: 1.8rem; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px;">$3.00</h3>
-            <p style="margin: 6px 0 0 0; font-size: 0.8rem; color: #94a3b8;">Kindly use it to buy at least one asset before withdrawing thank you</p>
+            <h3 style="margin: 0; font-size: 1.8rem; font-weight: 800; color: #38bdf8;">$3.00</h3>
           </div>
         </div>
-
       </div>
 
-      <div style="background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 28px; box-shadow: 0 12px 24px rgba(0,0,0,0.25);">
+      <div style="background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 28px;">
         <h3 style="margin: 0 0 20px 0; font-size: 1.1rem; color: #f1f5f9; border-bottom: 1px solid #1e293b; padding-bottom: 12px; display: flex; align-items: center; gap: 10px;">
           <i class="fa-solid fa-user-gear" style="color: #64748b;"></i> Authenticated Profile
         </h3>
-        
         <div style="display: flex; flex-direction: column; gap: 16px;">
           <div>
-            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Account Handle Identifier</span>
+            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Account Handle Identifier</span>
             <span id="dash-meta-username" style="font-size: 0.95rem; color: #f8fafc; font-weight: 600; background-color: #060913; padding: 6px 12px; border-radius: 6px; display: inline-block; border: 1px solid #1e293b;">-</span>
           </div>
           <div>
-            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Registered Email</span>
-            <span id="dash-meta-email" style="font-size: 0.95rem; color: #f8fafc; font-weight: 500;">-</span>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div>
-              <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Gender Group</span>
-              <span id="dash-meta-gender" style="font-size: 0.95rem; color: #f8fafc; font-weight: 500;">-</span>
-            </div>
-            <div>
-              <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Date of Birth</span>
-              <span id="dash-meta-birth" style="font-size: 0.95rem; color: #f8fafc; font-weight: 500; font-family: monospace;">-</span>
-            </div>
-          </div>
-          <div>
-            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Internal System Database UID Key</span>
-            <span id="dash-meta-uid" style="font-size: 0.82rem; color: #38bdf8; font-family: monospace; word-break: break-all; background-color: rgba(56, 189, 248, 0.04); padding: 8px; border-radius: 6px; display: block; border: 1px solid rgba(56, 189, 248, 0.15);">-</span>
+            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Registered Email</span>
+            <span id="dash-meta-email" style="font-size: 0.95rem; color: #f8fafc;">-</span>
           </div>
         </div>
       </div>
-
     </div>
-
   </main>
 
   <script>
-    // Global Market Asset Registry 
     const cryptoAssets = [
-        // --- CRYPTOCURRENCY ---
-        { id: 1, name: "Bitcoin", ticker: "BTC", basePrice: 64200.00, icon: "fa-brands fa-bitcoin", color: "#f59e0b", cat: "CRYPTO" },
-        { id: 2, name: "Ethereum", ticker: "ETH", basePrice: 3450.00, icon: "fa-brands fa-ethereum", color: "#6366f1", cat: "CRYPTO" },
-        { id: 3, name: "Solana", ticker: "SOL", basePrice: 145.10, icon: "fa-solid fa-cube", color: "#a855f7", cat: "CRYPTO" },
-        { id: 4, name: "Binance Coin", ticker: "BNB", basePrice: 580.25, icon: "fa-solid fa-coins", color: "#f39c12", cat: "CRYPTO" },
-        { id: 5, name: "Ripple", ticker: "XRP", basePrice: 0.49, icon: "fa-solid fa-circle-nodes", color: "#23a2f6", cat: "CRYPTO" },
-        { id: 6, name: "Cardano", ticker: "ADA", basePrice: 0.38, icon: "fa-solid fa-snowflake", color: "#0033ad", cat: "CRYPTO" },
-        { id: 7, name: "Dogecoin", ticker: "DOGE", basePrice: 0.12, icon: "fa-solid fa-paw", color: "#ba9f33", cat: "CRYPTO" },
-        { id: 8, name: "Tron", ticker: "TRX", basePrice: 0.12, icon: "fa-solid fa-diamond", color: "#ef4444", cat: "CRYPTO" },
-        { id: 9, name: "Avalanche", ticker: "AVAX", basePrice: 28.75, icon: "fa-solid fa-mountain", color: "#e74c3c", cat: "CRYPTO" },
-        { id: 10, name: "Polkadot", ticker: "DOT", basePrice: 5.90, icon: "fa-solid fa-ellipsis-vertical", color: "#e6007a", cat: "CRYPTO" },
-        { id: 11, name: "Chainlink", ticker: "LINK", basePrice: 13.40, icon: "fa-solid fa-link", color: "#375bd2", cat: "CRYPTO" },
-        { id: 12, name: "Polygon", ticker: "MATIC", basePrice: 0.55, icon: "fa-solid fa-draw-polygon", color: "#8247e5", cat: "CRYPTO" },
-        { id: 13, name: "Litecoin", ticker: "LTC", basePrice: 74.30, icon: "fa-solid fa-money-bill-trend-up", color: "#345d9d", cat: "CRYPTO" },
-        { id: 14, name: "Uniswap", ticker: "UNI", basePrice: 7.15, icon: "fa-solid fa-clover", color: "#ff007a", cat: "CRYPTO" },
-        { id: 15, name: "NEAR Protocol", ticker: "NEAR", basePrice: 4.85, icon: "fa-solid fa-globe", color: "#64748b", cat: "CRYPTO" },
-        { id: 16, name: "Render Token", ticker: "RNDR", basePrice: 7.65, icon: "fa-solid fa-images", color: "#e11d48", cat: "CRYPTO" },
-        { id: 17, name: "Aptos", ticker: "APT", basePrice: 6.90, icon: "fa-solid fa-bolt-lightning", color: "#1ef1d3", cat: "CRYPTO" },
-        { id: 18, name: "Hedera", ticker: "HBAR", basePrice: 0.075, icon: "fa-solid fa-gavel", color: "#888888", cat: "CRYPTO" },
-        { id: 19, name: "Stellar", ticker: "XLM", basePrice: 0.092, icon: "fa-solid fa-star", color: "#f8fafc", cat: "CRYPTO" },
-        { id: 20, name: "Cosmos", ticker: "ATOM", basePrice: 6.20, icon: "fa-solid fa-atom", color: "#2e3440" , cat: "CRYPTO" },
-        { id: 21, name: "Kaspa", ticker: "KAS", basePrice: 0.15, icon: "fa-solid fa-gem", color: "#70ffd0", cat: "CRYPTO" },
-        { id: 22, name: "Monero", ticker: "XMR", basePrice: 162.40, icon: "fa-solid fa-user-secret", color: "#ff6600", cat: "CRYPTO" },
-        { id: 23, name: "Arbitrum", ticker: "ARB", basePrice: 0.82, icon: "fa-solid fa-layer-group", color: "#28a0f0", cat: "CRYPTO" },
-        { id: 24, name: "Optimism", ticker: "OP", basePrice: 1.75, icon: "fa-solid fa-arrow-up-right-dots", color: "#ff0420", cat: "CRYPTO" },
-        { id: 25, name: "Injective", ticker: "INJ", basePrice: 22.10, icon: "fa-solid fa-chart-line", color: "#00d6e6", cat: "CRYPTO" },
-        { id: 26, name: "Sui", ticker: "SUI", basePrice: 0.94, icon: "fa-solid fa-water", color: "#6fbcf0", cat: "CRYPTO" },
-        { id: 27, name: "Fantom", ticker: "FTM", basePrice: 0.52, icon: "fa-solid fa-ghost", color: "#1969ff", cat: "CRYPTO" },
-        { id: 28, name: "Fetch.ai", ticker: "FET", basePrice: 1.34, icon: "fa-solid fa-brain", color: "#22d3ee", cat: "CRYPTO" },
-        { id: 29, name: "Stacks", ticker: "STX", basePrice: 1.62, icon: "fa-solid fa-boxes-stacked", color: "#5546ff", cat: "CRYPTO" },
-        { id: 30, name: "Aave", ticker: "AAVE", basePrice: 88.50, icon: "fa-solid fa-piggy-bank", color: "#2eb67d", cat: "CRYPTO" },
-        { id: 31, name: "Maker", ticker: "MKR", basePrice: 2150.00, icon: "fa-solid fa-landmark", color: "#1aab9b", cat: "CRYPTO" },
-        { id: 32, name: "VeChain", ticker: "VET", basePrice: 0.024, icon: "fa-solid fa-shield-halved", color: "#15bdff", cat: "CRYPTO" },
-        { id: 33, name: "Thorchain", ticker: "RUNE", basePrice: 4.10, icon: "fa-solid fa-hammer", color: "#00f3ff", cat: "CRYPTO" },
-        { id: 34, name: "Lido DAO", ticker: "LDO", basePrice: 1.25, icon: "fa-solid fa-droplet", color: "#00a3ff", cat: "CRYPTO" },
-        { id: 35, name: "The Graph", ticker: "GRT", basePrice: 0.17, icon: "fa-solid fa-network-wired", color: "#6f4cff", cat: "CRYPTO" },
-        { id: 36, name: "Algorand", ticker: "ALGO", basePrice: 0.13, icon: "fa-solid fa-compass", color: "#f8fafc", cat: "CRYPTO" },
-        { id: 37, name: "Quant", ticker: "QNT", basePrice: 76.80, icon: "fa-solid fa-qrcode", color: "#272a31", cat: "CRYPTO" },
-        { id: 38, name: "Filecoin", ticker: "FIL", basePrice: 3.80, icon: "fa-solid fa-folder-open", color: "#0090ff", cat: "CRYPTO" },
-        { id: 39, name: "Internet Computer", ticker: "ICP", basePrice: 8.20, icon: "fa-solid fa-infinity", color: "#f15a24", cat: "CRYPTO" },
-        { id: 40, name: "Celestia", ticker: "TIA", basePrice: 4.90, icon: "fa-solid fa-cloud", color: "#7c3aed", cat: "CRYPTO" },
-        { id: 41, name: "Shiba Inu", ticker: "SHIB", basePrice: 0.000018, icon: "fa-solid fa-dog", color: "#e67e22", cat: "CRYPTO" },
-        { id: 42, name: "Pepe", ticker: "PEPE", basePrice: 0.000011, icon: "fa-solid fa-frog", color: "#00cc33", cat: "CRYPTO" },
-        { id: 43, name: "Bonk", ticker: "BONK", basePrice: 0.000022, icon: "fa-solid fa-bone", color: "#fbbf24", cat: "CRYPTO" },
-        { id: 44, name: "Floki", ticker: "FLOKI", basePrice: 0.00016, icon: "fa-solid fa-shield-dog", color: "#dc2626", cat: "CRYPTO" },
-
-        // --- GLOBAL STOCKS & INDICES ---
-        { id: 45, name: "S&P 500 Index", ticker: "SPX", basePrice: 5432.20, icon: "fa-solid fa-chart-line", color: "#10b981", cat: "STOCKS" },
-        { id: 46, name: "Nasdaq 100", ticker: "NDX", basePrice: 19650.80, icon: "fa-solid fa-chart-column", color: "#38bdf8", cat: "STOCKS" },
-        { id: 47, name: "Dow Jones Industrial", ticker: "DJI", basePrice: 39120.00, icon: "fa-solid fa-building-columns", color: "#a855f7", cat: "STOCKS" },
-        { id: 48, name: "Apple Inc.", ticker: "AAPL", basePrice: 214.30, icon: "fa-brands fa-apple", color: "#f8fafc", cat: "STOCKS" },
-        { id: 49, name: "Microsoft Corp.", ticker: "MSFT", basePrice: 442.15, icon: "fa-brands fa-windows", color: "#00a4ef", cat: "STOCKS" },
-        { id: 50, name: "NVIDIA Corporation", ticker: "NVDA", basePrice: 127.40, icon: "fa-solid fa-microchip", color: "#76b900", cat: "STOCKS" },
-        { id: 51, name: "Alphabet Inc.", ticker: "GOOGL", basePrice: 178.20, icon: "fa-brands fa-google", color: "#ea4335", cat: "STOCKS" },
-        { id: 52, name: "Amazon.com Inc.", ticker: "AMZN", basePrice: 189.10, icon: "fa-brands fa-amazon", color: "#ff9900", cat: "STOCKS" },
-        { id: 53, name: "Meta Platforms", ticker: "META", basePrice: 504.60, icon: "fa-brands fa-meta", color: "#0668e1", cat: "STOCKS" },
-        { id: 54, name: "Tesla Inc.", ticker: "TSLA", basePrice: 184.80, icon: "fa-solid fa-car", color: "#cc0000", cat: "STOCKS" },
-        { id: 55, name: "Berkshire Hathaway", ticker: "BRK.B", basePrice: 412.50, icon: "fa-solid fa-gem", color: "#6366f1", cat: "STOCKS" },
-        { id: 56, name: "Eli Lilly & Co", ticker: "LLY", basePrice: 885.00, icon: "fa-solid fa-prescription-bottle-medical", color: "#e74c3c", cat: "STOCKS" },
-        { id: 57, name: "Broadcom Inc.", ticker: "AVGO", basePrice: 1735.00, icon: "fa-solid fa-memory", color: "#2563eb", cat: "STOCKS" },
-        { id: 58, name: "JPMorgan Chase & Co", ticker: "JPM", basePrice: 198.40, icon: "fa-solid fa-building", color: "#10b981", cat: "STOCKS" },
-        { id: 59, name: "Visa Inc.", ticker: "V", basePrice: 272.10, icon: "fa-brands fa-cc-visa", color: "#0033ad", cat: "STOCKS" },
-        { id: 60, name: "Walmart Inc.", ticker: "WMT", basePrice: 67.90, icon: "fa-solid fa-store", color: "#ffc220", cat: "STOCKS" },
-        { id: 61, name: "Exxon Mobil Corp.", ticker: "XOM", basePrice: 112.30, icon: "fa-solid fa-oil-well", color: "#ef4444", cat: "STOCKS" },
-        { id: 62, name: "Advanced Micro Devices", ticker: "AMD", basePrice: 158.60, icon: "fa-solid fa-server", color: "#f39c12", cat: "STOCKS" },
-        { id: 63, name: "Netflix Inc.", ticker: "NFLX", basePrice: 660.40, icon: "fa-solid fa-tv", color: "#e50914", cat: "STOCKS" },
-        { id: 64, name: "Adobe Inc.", ticker: "ADBE", basePrice: 522.10, icon: "fa-solid fa-palette", color: "#ff0000", cat: "STOCKS" },
-        { id: 65, name: "Chevron Corp.", ticker: "CVX", basePrice: 154.20, icon: "fa-solid fa-gas-pump", color: "#23a2f6", cat: "STOCKS" },
-        { id: 66, name: "Intel Corp.", ticker: "INTC", basePrice: 30.45, icon: "fa-solid fa-calculator", color: "#0071c5", cat: "STOCKS" },
-        { id: 67, name: "Coca-Cola Co", ticker: "KO", basePrice: 62.80, icon: "fa-solid fa-bottle-water", color: "#fe001a", cat: "STOCKS" },
-        { id: 68, name: "PepsiCo Inc.", ticker: "PEP", basePrice: 164.50, icon: "fa-solid fa-glass-water", color: "#004b93", cat: "STOCKS" },
-        { id: 69, name: "Costco Wholesale", ticker: "COST", basePrice: 845.00, icon: "fa-solid fa-cart-flatbed", color: "#005ea6", cat: "STOCKS" },
-        { id: 70, name: "Salesforce Inc.", ticker: "CRM", basePrice: 232.40, icon: "fa-solid fa-cloud-sun", color: "#00a1e0", cat: "STOCKS" },
-        { id: 71, name: "Qualcomm Inc.", ticker: "QCOM", basePrice: 212.80, icon: "fa-solid fa-wifi", color: "#3253dc", cat: "STOCKS" },
-        { id: 72, name: "Cisco Systems", ticker: "CSCO", basePrice: 45.60, icon: "fa-solid fa-network-wired", color: "#049fd9", cat: "STOCKS" },
-        { id: 73, name: "McDonald's Corp.", ticker: "MCD", basePrice: 252.15, icon: "fa-solid fa-hamburger", color: "#272a31", cat: "STOCKS" },
-        { id: 74, name: "Walt Disney Co", ticker: "DIS", basePrice: 101.40, icon: "fa-solid fa-film", color: "#113ccf", cat: "STOCKS" },
-        { id: 75, name: "Nike Inc.", ticker: "NKE", basePrice: 94.80, icon: "fa-solid fa-socks", color: "#f8fafc", cat: "STOCKS" },
-
-        // --- COMMODITIES ---
-        { id: 76, name: "Gold Spot", ticker: "XAU", basePrice: 2335.50, icon: "fa-solid fa-cubes", color: "#fbbf24", cat: "COMMODITIES" },
-        { id: 77, name: "Silver Spot", ticker: "XAG", basePrice: 29.45, icon: "fa-solid fa-circle", color: "#9ca3af", cat: "COMMODITIES" },
-        { id: 78, name: "Crude Oil Brent", ticker: "BRENT", basePrice: 85.20, icon: "fa-solid fa-droplet", color: "#e74c3c", cat: "COMMODITIES" },
-        { id: 79, name: "Crude Oil WTI", ticker: "WTI", basePrice: 80.60, icon: "fa-solid fa-fire-flame-simple", color: "#f97316", cat: "COMMODITIES" },
-        { id: 80, name: "Natural Gas Spot", ticker: "NATGAS", basePrice: 2.85, icon: "fa-solid fa-wind", color: "#22d3ee", cat: "COMMODITIES" },
-        { id: 81, name: "Copper Futures", ticker: "COPPER", basePrice: 4.45, icon: "fa-solid fa-screwdriver", color: "#b45309", cat: "COMMODITIES" },
-        { id: 82, name: "Platinum Spot", ticker: "XPT", basePrice: 994.00, icon: "fa-solid fa-gem", color: "#a855f7", cat: "COMMODITIES" },
-        { id: 83, name: "Palladium Spot", ticker: "XPD", basePrice: 925.50, icon: "fa-solid fa-ring", color: "#64748b", cat: "COMMODITIES" },
-        { id: 84, name: "Aluminum Futures", ticker: "ALUM", basePrice: 2510.00, icon: "fa-solid fa-sheet-plastic", color: "#cbd5e1", cat: "COMMODITIES" },
-        { id: 85, name: "Zinc Futures", ticker: "ZINC", basePrice: 2840.00, icon: "fa-solid fa-mound", color: "#94a3b8", cat: "COMMODITIES" },
-
-        // --- FOREX CURRENCY PAIRS ---
-        { id: 86, name: "Euro / US Dollar", ticker: "EURUSD", basePrice: 1.0745, icon: "fa-solid fa-money-bill-transfer", color: "#3b82f6", cat: "FOREX" },
-        { id: 87, name: "Pound / US Dollar", ticker: "GBPUSD", basePrice: 1.2685, icon: "fa-solid fa-money-bill-transfer", color: "#10b981", cat: "FOREX" },
-        { id: 88, name: "US Dollar / Japanese Yen", ticker: "USDJPY", basePrice: 157.95, icon: "fa-solid fa-money-bill-transfer", color: "#ef4444", cat: "FOREX" },
-        { id: 89, name: "Australian Dollar / USD", ticker: "AUDUSD", basePrice: 0.6650, icon: "fa-solid fa-money-bill-transfer", color: "#f59e0b", cat: "FOREX" },
-        { id: 90, name: "US Dollar / Canadian Dollar", ticker: "USDCAD", basePrice: 1.3690, icon: "fa-solid fa-money-bill-transfer", color: "#6366f1", cat: "FOREX" },
-        { id: 91, name: "US Dollar / Swiss Franc", ticker: "USDCHF", basePrice: 0.8920, icon: "fa-solid fa-money-bill-transfer", color: "#ec4899", cat: "FOREX" },
-        { id: 92, name: "NZ Dollar / US Dollar", ticker: "NZDUSD", basePrice: 0.6120, icon: "fa-solid fa-money-bill-transfer", color: "#14b8a6", cat: "FOREX" },
-        { id: 93, name: "Euro / British Pound", ticker: "EURGBP", basePrice: 0.8465, icon: "fa-solid fa-money-bill-transfer", color: "#8b5cf6", cat: "FOREX" },
-        { id: 94, name: "Euro / Japanese Yen", ticker: "EURJPY", basePrice: 169.75, icon: "fa-solid fa-money-bill-transfer", color: "#f97316", cat: "FOREX" },
-        { id: 95, name: "British Pound / Japanese Yen", ticker: "GBPJPY", basePrice: 200.40, icon: "fa-solid fa-money-bill-transfer", color: "#06b6d4", cat: "FOREX" }
+        { id: 1, name: "Bitcoin", ticker: "BTC", basePrice: 64200.00, icon: "fa-brands fa-bitcoin", color: "#f59e0b", cat: "CRYPTO", trend: "up" },
+        { id: 2, name: "Ethereum", ticker: "ETH", basePrice: 3450.00, icon: "fa-brands fa-ethereum", color: "#6366f1", cat: "CRYPTO", trend: "up" },
+        { id: 3, name: "Solana", ticker: "SOL", basePrice: 145.10, icon: "fa-solid fa-cube", color: "#a855f7", cat: "CRYPTO", trend: "down" },
+        { id: 4, name: "Binance Coin", ticker: "BNB", basePrice: 580.25, icon: "fa-solid fa-coins", color: "#f39c12", cat: "CRYPTO", trend: "up" },
+        { id: 5, name: "Ripple", ticker: "XRP", basePrice: 0.49, icon: "fa-solid fa-circle-nodes", color: "#23a2f6", cat: "CRYPTO", trend: "down" },
+        { id: 6, name: "Cardano", ticker: "ADA", basePrice: 0.38, icon: "fa-solid fa-snowflake", color: "#0033ad", cat: "CRYPTO", trend: "up" },
+        { id: 7, name: "Dogecoin", ticker: "DOGE", basePrice: 0.12, icon: "fa-solid fa-paw", color: "#ba9f33", cat: "CRYPTO", trend: "down" },
+        { id: 8, name: "Tron", ticker: "TRX", basePrice: 0.12, icon: "fa-solid fa-diamond", color: "#ef4444", cat: "CRYPTO", trend: "up" },
+        { id: 9, name: "Avalanche", ticker: "AVAX", basePrice: 28.75, icon: "fa-solid fa-mountain", color: "#e74c3c", cat: "CRYPTO", trend: "down" },
+        { id: 10, name: "Polkadot", ticker: "DOT", basePrice: 5.90, icon: "fa-solid fa-ellipsis-vertical", color: "#e6007a", cat: "CRYPTO", trend: "up" },
+        { id: 45, name: "S&P 500 Index", ticker: "SPX", basePrice: 5432.20, icon: "fa-solid fa-chart-line", color: "#10b981", cat: "STOCKS", trend: "up" },
+        { id: 46, name: "Nasdaq 100", ticker: "NDX", basePrice: 19650.80, icon: "fa-solid fa-chart-column", color: "#38bdf8", cat: "STOCKS", trend: "up" },
+        { id: 48, name: "Apple Inc.", ticker: "AAPL", basePrice: 214.30, icon: "fa-brands fa-apple", color: "#f8fafc", cat: "STOCKS", trend: "down" },
+        { id: 49, name: "Microsoft Corp.", ticker: "MSFT", basePrice: 442.15, icon: "fa-brands fa-windows", color: "#00a4ef", cat: "STOCKS", trend: "up" },
+        { id: 50, name: "NVIDIA Corporation", ticker: "NVDA", basePrice: 127.40, icon: "fa-solid fa-microchip", color: "#76b900", cat: "STOCKS", trend: "up" },
+        { id: 76, name: "Gold Spot", ticker: "XAU", basePrice: 2335.50, icon: "fa-solid fa-cubes", color: "#fbbf24", cat: "COMMODITIES", trend: "up" },
+        { id: 77, name: "Silver Spot", ticker: "XAG", basePrice: 29.45, icon: "fa-solid fa-circle", color: "#9ca3af", cat: "COMMODITIES", trend: "down" },
+        { id: 78, name: "Crude Oil Brent", ticker: "BRENT", basePrice: 85.20, icon: "fa-solid fa-droplet", color: "#e74c3c", cat: "COMMODITIES", trend: "up" },
+        { id: 86, name: "Euro / US Dollar", ticker: "EURUSD", basePrice: 1.0745, icon: "fa-solid fa-money-bill-transfer", color: "#3b82f6", cat: "FOREX", trend: "down" },
+        { id: 87, name: "Pound / US Dollar", ticker: "GBPUSD", basePrice: 1.2685, icon: "fa-solid fa-money-bill-transfer", color: "#10b981", cat: "FOREX", trend: "up" },
+        { id: 88, name: "US Dollar / Japanese Yen", ticker: "USDJPY", basePrice: 157.95, icon: "fa-solid fa-money-bill-transfer", color: "#ef4444", cat: "FOREX", trend: "up" }
     ];
 
     const SPREAD_MARGIN_RATE = (65000 - 61000) / 65000;
     let selectedCategory = "ALL";
     let lastFilterString = "";
-    const priceCache = {};
 
     function toggleCryptoMenu() {
-      const drawer = document.getElementById("crypto-drawer");
-      const overlay = document.getElementById("menu-overlay");
-      if (drawer && overlay) {
-        drawer.classList.toggle("open");
-        overlay.classList.toggle("visible");
-      }
+      document.getElementById("crypto-drawer").classList.toggle("open");
+      document.getElementById("menu-overlay").classList.toggle("visible");
     }
 
     function switchMarketTab(category) {
       selectedCategory = category;
-      document.querySelectorAll('.market-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
+      document.querySelectorAll('.market-tab').forEach(tab => tab.classList.remove('active'));
       document.getElementById(`tab-${category}`).classList.add('active');
       renderMatrixCards();
     }
 
-    // High Performance Live Fluctuations Engine 
+    // High Performance 1-Second Price Engine
     function initializePriceTickSimulation() {
       setInterval(() => {
-        // Select 3 to 6 assets at random to fluctuate simultaneously each tick
-        const itemsToUpdateCount = Math.floor(Math.random() * 4) + 3;
+        // Randomly pick 5-8 assets to fluctuate every second
+        const countToUpdate = Math.floor(Math.random() * 4) + 5;
         
-        for (let i = 0; i < itemsToUpdateCount; i++) {
-          const targetIndex = Math.floor(Math.random() * cryptoAssets.length);
-          const asset = cryptoAssets[targetIndex];
+        for (let i = 0; i < countToUpdate; i++) {
+          const randomIndex = Math.floor(Math.random() * cryptoAssets.length);
+          const asset = cryptoAssets[randomIndex];
           
-          // Generate realistic micro-movements (-0.15% to +0.15%)
-          const percentageMovement = (Math.random() * 0.3 - 0.15) / 100;
-          const originalPrice = asset.basePrice;
-          asset.basePrice = originalPrice * (1 + percentageMovement);
-          
-          // Track direction of movement for custom UI visual pulses
-          const elementKey = `asset-price-${asset.id}`;
-          const currentDOMElement = document.getElementById(elementKey);
-          if (currentDOMElement) {
-            const isUpwardNode = asset.basePrice > originalPrice;
-            currentDOMElement.classList.remove('flash-up', 'flash-down');
-            void currentDOMElement.offsetWidth; // Trigger reflow
-            currentDOMElement.classList.add(isUpwardNode ? 'flash-up' : 'flash-down');
-          }
+          const changePercent = (Math.random() * 0.24 - 0.12) / 100; // -0.12% to +0.12%
+          const oldPrice = asset.basePrice;
+          asset.basePrice = oldPrice * (1 + changePercent);
+          asset.trend = changePercent >= 0 ? "up" : "down";
+
+          // Dynamically target and pulse elements without re-rendering structures
+          updateNodePriceDisplay(asset, asset.basePrice > oldPrice);
         }
-        // Force asynchronous visual update without destroying layout state
-        renderMatrixCards();
-      }, 2500);
+      }, 1000); // 1 Second Tickers
+    }
+
+    function updateNodePriceDisplay(asset, isUpward) {
+      const discountPrice = asset.basePrice * (1 - SPREAD_MARGIN_RATE);
+      let precision = asset.basePrice < 1.0 ? (asset.basePrice < 0.001 ? 6 : 4) : 2;
+
+      const discountNode = document.getElementById(`disc-price-${asset.id}`);
+      const spotNode = document.getElementById(`spot-price-${asset.id}`);
+      const pulseWrapper = document.getElementById(`price-wrapper-${asset.id}`);
+      const sparklineNode = document.getElementById(`sparkline-${asset.id}`);
+
+      if (discountNode && spotNode && pulseWrapper && sparklineNode) {
+        discountNode.textContent = `$${discountPrice.toFixed(precision)}`;
+        spotNode.textContent = `$${asset.basePrice.toFixed(precision)}`;
+        
+        // Update Sparkline Trend Icon
+        if (asset.trend === "up") {
+          sparklineNode.className = "fa-solid fa-chart-line";
+          sparklineNode.style.color = "#ef4444"; // Red for upward trending shorts/buys
+        } else {
+          sparklineNode.className = "fa-solid fa-chart-line-down";
+          sparklineNode.style.color = "#10b981"; // Green for drops
+        }
+
+        // Apply Flash Animation
+        pulseWrapper.classList.remove('flash-up', 'flash-down');
+        void pulseWrapper.offsetWidth; // Force Reflow
+        pulseWrapper.classList.add(isUpward ? 'flash-up' : 'flash-down');
+      }
     }
 
     function renderMatrixCards(filterString = lastFilterString) {
@@ -413,21 +302,14 @@
       });
 
       if (matchedTokens.length === 0) {
-        gridContainer.innerHTML = `<div style="text-align: center; padding: 40px 10px; color: #475569; font-size: 0.88rem;">No real market assets found matching criteria.</div>`;
+        gridContainer.innerHTML = `<div style="text-align: center; padding: 40px; color: #475569; font-size: 0.85rem;">No assets found.</div>`;
         return;
       }
 
-      // Dynamic patch mechanism to update prices without disrupting scroll status
       matchedTokens.forEach(token => {
-        const spotPrice = token.basePrice;
-        const discountPrice = spotPrice * (1 - SPREAD_MARGIN_RATE);
-        
-        let formattingPrecision = 2;
-        if (token.basePrice < 1.0) formattingPrecision = 4;
-        if (token.basePrice < 0.001) formattingPrecision = 6;
-
         const containerId = `asset-row-${token.id}`;
         let tokenItem = document.getElementById(containerId);
+        let precision = token.basePrice < 1.0 ? (token.basePrice < 0.001 ? 6 : 4) : 2;
 
         if (!tokenItem) {
           tokenItem = document.createElement("div");
@@ -440,78 +322,54 @@
           tokenItem.style.justifyContent = "space-between";
           tokenItem.style.alignItems = "center";
           tokenItem.style.boxSizing = "border-box";
-          tokenItem.style.transition = "background-color 0.4s ease";
           gridContainer.appendChild(tokenItem);
         }
 
+        const discountPrice = token.basePrice * (1 - SPREAD_MARGIN_RATE);
+        const graphIcon = token.trend === "up" ? "fa-chart-line" : "fa-chart-line-down";
+        const graphColor = token.trend === "up" ? "#ef4444" : "#10b981";
+
         tokenItem.innerHTML = `
           <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: ${token.color};">
+            <div style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: ${token.color};">
               <i class="${token.icon}"></i>
             </div>
             <div>
-              <h4 style="margin: 0; font-size: 0.85rem; color: #f1f5f9; font-weight: 600;">${token.name}</h4>
-              <span style="font-size: 0.72rem; color: #64748b; font-family: monospace; text-transform: uppercase;">${token.ticker}</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <h4 style="margin: 0; font-size: 0.85rem; color: #f1f5f9; font-weight: 600;">${token.name}</h4>
+                <i id="sparkline-${token.id}" class="fa-solid ${graphIcon}" style="font-size: 0.75rem; color: ${graphColor}; transition: all 0.2s;"></i>
+              </div>
+              <span style="font-size: 0.72rem; color: #64748b; font-family: monospace;">${token.ticker}</span>
             </div>
           </div>
-          <div id="asset-price-${token.id}" style="text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; padding: 2px 6px; border-radius: 4px;">
-            <div style="font-size: 0.88rem; color: #10b981; font-weight: 700;">$${discountPrice.toFixed(formattingPrecision)}</div>
-            <div style="font-size: 0.7rem; color: #64748b; text-decoration: line-through;">$${spotPrice.toFixed(formattingPrecision)}</div>
-            <a href="deposit.html" style="background-color: #38bdf8; color: #0f172a; text-decoration: none; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; margin-top: 2px;">
-              Buy <i class="fa-solid fa-cart-shopping" style="font-size: 0.65rem;"></i>
+          <div id="price-wrapper-${token.id}" style="text-align: right; display: flex; flex-direction: column; gap: 2px; align-items: flex-end; padding: 2px 6px; border-radius: 4px;">
+            <div id="disc-price-${token.id}" style="font-size: 0.88rem; color: #10b981; font-weight: 700;">$${discountPrice.toFixed(precision)}</div>
+            <div id="spot-price-${token.id}" style="font-size: 0.7rem; color: #64748b; text-decoration: line-through;">$${token.basePrice.toFixed(precision)}</div>
+            <a href="deposit.html" style="background-color: #38bdf8; color: #0f172a; text-decoration: none; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; margin-top: 2px;">
+              Buy
             </a>
           </div>
         `;
       });
 
-      // Clear structural elements that no longer pass our active filter category
-      Array.from(gridContainer.children).forEach(childElement => {
-        const structuralId = parseInt(childElement.id.replace('asset-row-', ''));
-        const fitsActiveFilter = matchedTokens.some(t => t.id === structuralId);
-        if(!fitsActiveFilter) {
-          childElement.remove();
-        }
+      // Structural sanitation
+      Array.from(gridContainer.children).forEach(child => {
+        const structuralId = parseInt(child.id.replace('asset-row-', ''));
+        if(!matchedTokens.some(t => t.id === structuralId)) child.remove();
       });
     }
 
     function parseSecureUserContext() {
-      let currentUserData = JSON.parse(localStorage.getItem("authenticated_current_user"));
+      let currentUserData = JSON.parse(localStorage.getItem("authenticated_current_user")) || {
+        fullName: "Oreva", username: "oreva_dev", email: "oreva@competenttraders.com"
+      };
 
-      if (!currentUserData) {
-        currentUserData = {
-          uid: "acc_demo777",
-          firstName: "Oreva",
-          lastName: "Representative",
-          fullName: "Oreva",
-          username: "oreva_dev",
-          email: "oreva@competenttraders.com",
-          gender: "Male",
-          birthdate: "1995-08-12"
-        };
-        localStorage.setItem("authenticated_current_user", JSON.stringify(currentUserData));
-      }
-
-      const nameEl = document.getElementById("dash-display-fullname");
-      const userEl = document.getElementById("dash-meta-username");
-      const emailEl = document.getElementById("dash-meta-email");
-      const genderEl = document.getElementById("dash-meta-gender");
-      const birthEl = document.getElementById("dash-meta-birth");
-      const uidEl = document.getElementById("dash-meta-uid");
-
-      if(nameEl) nameEl.textContent = currentUserData.fullName || (currentUserData.firstName + " " + currentUserData.lastName);
-      if(userEl) userEl.textContent = "@" + currentUserData.username;
-      if(emailEl) emailEl.textContent = currentUserData.email;
-      if(genderEl) genderEl.textContent = currentUserData.gender;
-      if(birthEl) birthEl.textContent = currentUserData.birthdate;
-      if(uidEl) uidEl.textContent = currentUserData.uid;
+      if(document.getElementById("dash-display-fullname")) document.getElementById("dash-display-fullname").textContent = currentUserData.fullName;
+      if(document.getElementById("dash-meta-username")) document.getElementById("dash-meta-username").textContent = "@" + currentUserData.username;
+      if(document.getElementById("dash-meta-email")) document.getElementById("dash-meta-email").textContent = currentUserData.email;
 
       renderMatrixCards();
       initializePriceTickSimulation();
-    }
-
-    function terminateUserSession() {
-      localStorage.removeItem("authenticated_current_user");
-      window.location.reload();
     }
 
     document.addEventListener("DOMContentLoaded", parseSecureUserContext);
