@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ease-crypt // Enterprise Multi-Asset Desk</title>
+  <title>User Enterprise Asset Management Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* Premium Sliding Drawer Animation Classes */
     .hamburger-drawer {
       position: fixed;
       top: 0;
-      left: -380px;
-      width: 380px;
+      left: -360px;
+      width: 360px;
       height: 100%;
-      background-color: #0b0f19;
+      background-color: #0f172a;
       border-right: 1px solid #1e293b;
-      box-shadow: 25px 0 50px -12px rgba(0, 0, 0, 0.8);
+      box-shadow: 25px 0 50px -12px rgba(0, 0, 0, 0.7);
       z-index: 1000;
       transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
     }
     .hamburger-drawer.open {
-      left: 0 !important;
+      left: 0 !important; /* Forces the open class override */
     }
     .drawer-overlay {
       position: fixed;
@@ -30,8 +30,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(2, 6, 23, 0.75);
-      backdrop-filter: blur(6px);
+      background-color: rgba(2, 6, 23, 0.7);
+      backdrop-filter: blur(4px);
       z-index: 999;
       opacity: 0;
       pointer-events: none;
@@ -46,160 +46,150 @@
       width: 6px;
     }
     .custom-scroll::-webkit-scrollbar-track {
-      background: #0b0f19;
+      background: #0f172a;
     }
     .custom-scroll::-webkit-scrollbar-thumb {
-      background: #1e293b;
+      background: #334155;
       border-radius: 3px;
     }
     .custom-scroll::-webkit-scrollbar-thumb:hover {
-      background: #334155;
+      background: #475569;
     }
-    
-    /* Price Flash Animations */
-    @keyframes flash-green {
-      0% { background-color: rgba(16, 185, 129, 0.2); }
+
+    /* Soft flash animations for updating tickers */
+    @keyframes green-flash {
+      0% { background-color: rgba(16, 185, 129, 0.15); }
       100% { background-color: transparent; }
     }
-    @keyframes flash-red {
-      0% { background-color: rgba(239, 68, 68, 0.2); }
+    @keyframes red-flash {
+      0% { background-color: rgba(239, 68, 68, 0.15); }
       100% { background-color: transparent; }
     }
-    .tick-up { animation: flash-green 0.8s ease-out; }
-    .tick-down { animation: flash-red 0.8s ease-out; }
+    .up-tick { animation: green-flash 0.8s ease-out; }
+    .down-tick { animation: red-flash 0.8s ease-out; }
   </style>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #030712; color: #f3f4f6; min-height: 100vh; box-sizing: border-box;">
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #060913; color: #f8fafc; min-height: 100vh; box-sizing: border-box;">
 
   <div id="menu-overlay" class="drawer-overlay" onclick="toggleCryptoMenu()"></div>
 
   <div id="crypto-drawer" class="hamburger-drawer">
-    <div style="padding: 24px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; background-color: #0e1424;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <i class="fa-solid fa-chart-line" style="color: #10b981; font-size: 1.2rem;"></i>
-        <h3 style="margin: 0; font-size: 1.1rem; color: #ffffff; font-weight: 700; letter-spacing: -0.3px;">Live Broker Desk</h3>
+    <div style="padding: 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-tags" style="color: #38bdf8; font-size: 1.1rem;"></i>
+        <h3 style="margin: 0; font-size: 1.1rem; color: #f1f5f9; font-weight: 700;">Discount Market Assets</h3>
       </div>
-      <button onclick="toggleCryptoMenu()" style="background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.3rem;"><i class="fa-solid fa-xmark"></i></button>
+      <button onclick="toggleCryptoMenu()" style="background: none; border: none; color: #64748b; cursor: pointer; font-size: 1.2rem;"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
-    <div style="padding: 16px; border-bottom: 1px solid #1e293b; background-color: #090d16; display: flex; flex-direction: column; gap: 12px;">
+    <div style="padding: 12px 16px; background-color: #0b0f19; border-bottom: 1px solid #1e293b; display: flex; gap: 6px; overflow-x: auto;" class="custom-scroll">
+      <button onclick="switchMarketTab('ALL')" style="background-color: #38bdf8; color: #0f172a; border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; white-space: nowrap;">All Assets</button>
+      <button onclick="switchMarketTab('CRYPTO')" style="background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; white-space: nowrap;">Crypto</button>
+      <button onclick="switchMarketTab('INDICES')" style="background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; white-space: nowrap;">Indices</button>
+      <button onclick="switchMarketTab('METALS')" style="background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; white-space: nowrap;">Metals</button>
+      <button onclick="switchMarketTab('ETF')" style="background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; white-space: nowrap;">ETFs</button>
+      <button onclick="switchMarketTab('BOND')" style="background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; white-space: nowrap;">Bonds</button>
+    </div>
+
+    <div style="padding: 16px; border-bottom: 1px solid #1e293b; background-color: #0b0f19;">
       <div style="position: relative;">
-        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.85rem;"></i>
-        <input type="text" id="crypto-search" oninput="renderMatrixCards(this.value)" style="width: 100%; background-color: #111827; border: 1px solid #1e293b; border-radius: 8px; padding: 10px 12px 10px 38px; color: #f3f4f6; font-size: 0.85rem; box-sizing: border-box; outline: none; transition: border 0.2s;" placeholder="Filter across 300+ target assets...">
-      </div>
-      
-      <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;" class="custom-scroll">
-        <button onclick="filterCategory('ALL')" style="background-color: #1e293b; color: #ffffff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap;">All</button>
-        <button onclick="filterCategory('CRYPTO')" style="background-color: #111827; color: #94a3b8; border: 1px solid #1e293b; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; white-space: nowrap;">Crypto</button>
-        <button onclick="filterCategory('INDICES')" style="background-color: #111827; color: #94a3b8; border: 1px solid #1e293b; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; white-space: nowrap;">Indices</button>
-        <button onclick="filterCategory('METALS')" style="background-color: #111827; color: #94a3b8; border: 1px solid #1e293b; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; white-space: nowrap;">Metals</button>
-        <button onclick="filterCategory('ETF')" style="background-color: #111827; color: #94a3b8; border: 1px solid #1e293b; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; white-space: nowrap;">ETFs</button>
-        <button onclick="filterCategory('BOND')" style="background-color: #111827; color: #94a3b8; border: 1px solid #1e293b; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; white-space: nowrap;">Bonds</button>
+        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem;"></i>
+        <input type="text" id="crypto-search" oninput="renderMatrixCards(this.value)" style="width: 100%; background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 10px 12px 10px 36px; color: #f8fafc; font-size: 0.85rem; box-sizing: border-box; outline: none;" placeholder="Search 300+ target assets...">
       </div>
     </div>
 
-    <div id="crypto-grid" class="custom-scroll" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; background-color: #070a12;">
-      </div>
+    <div id="crypto-grid" class="custom-scroll" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+    </div>
   </div>
 
-  <nav style="background-color: #0b0f19; border-bottom: 1px solid #1e293b; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 900;">
-    <div style="display: flex; align-items: center; gap: 24px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
-          <i class="fa-solid fa-layer-group" style="color: #ffffff; font-size: 1.1rem;"></i>
-        </div>
-        <h1 style="margin: 0; font-size: 1.3rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">ease-crypt<span style="color: #10b981; font-weight: 400;">.desk</span></h1>
-      </div>
-      
-      <button onclick="toggleCryptoMenu()" style="background-color: #111827; border: 1px solid #1e293b; color: #f3f4f6; padding: 10px 16px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.85rem; transition: all 0.2s;">
-        <i class="fa-solid fa-wallet" style="font-size: 0.95rem; color: #10b981;"></i> <span>Terminal Pricing</span>
+  <nav style="background-color: #0f172a; border-bottom: 1px solid #1e293b; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 900;">
+    <div style="display: flex; align-items: center; gap: 18px;">
+      <button onclick="toggleCryptoMenu()" style="background-color: #1e293b; border: 1px solid #334155; color: #f1f5f9; padding: 10px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.85rem; transition: background 0.2s;">
+        <i class="fa-solid fa-bars" style="font-size: 1rem; color: #38bdf8;"></i> <span>View Token Discounts</span>
       </button>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 32px; height: 32px; background-color: rgba(56, 189, 248, 0.12); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-shield-halved" style="color: #38bdf8; font-size: 1rem;"></i>
+        </div>
+        <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #f1f5f9; letter-spacing: -0.3px;">ease-crypt</h1>
+      </div>
     </div>
     
-    <button onclick="terminateUserSession()" style="background-color: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s;">
-      <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Log Out</span>
+    <button onclick="terminateUserSession()" style="background-color: rgba(239, 68, 68, 0.08); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s;">
+      <i class="fa-solid fa-right-from-bracket"></i> <span>Log Out</span>
     </button>
   </nav>
 
-  <main style="max-width: 1300px; margin: 40px auto; padding: 0 24px; box-sizing: border-box;">
+  <main style="max-width: 1200px; margin: 32px auto; padding: 0 16px; box-sizing: border-box;">
     
-    <div style="margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1px solid #334155; border-radius: 16px; padding: 28px; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
       <div>
-        <h2 style="margin: 0; font-size: 1.8rem; color: #ffffff; font-weight: 800; letter-spacing: -0.5px;">Welcome Back, <span id="dash-display-fullname" style="color: #3b82f6;">User</span></h2>
-        <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: #9ca3af;">Corporate Access Clearance Token: <span style="color: #10b981; font-weight: 600;">Active Account Ledger</span></p>
+        <h2 style="margin: 0; font-size: 1.6rem; color: #ffffff; font-weight: 800; letter-spacing: -0.4px;">Welcome Back, <span id="dash-display-fullname" style="color: #38bdf8;">User</span>!</h2>
+        <p style="margin: 6px 0 0 0; font-size: 0.9rem; color: #94a3b8;">Your account state parameters are fully authorized. Active clearance status: <span style="color: #10b981; font-weight: 600;">Verified Profile Ledger</span>.</p>
       </div>
-      <div style="background-color: #0b0f19; border: 1px solid #1e293b; padding: 10px 20px; border-radius: 12px; display: flex; align-items: center; gap: 10px;">
+      <div style="background-color: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.2); padding: 8px 16px; border-radius: 30px; display: flex; align-items: center; gap: 8px;">
         <span style="width: 8px; height: 8px; background-color: #10b981; border-radius: 50%; display: inline-block;"></span>
-        <span style="font-size: 0.8rem; font-weight: 700; color: #f3f4f6; letter-spacing: 0.5px; text-transform: uppercase;">Tick Engine Online</span>
+        <span style="font-size: 0.78rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">Live Network Feed Active</span>
       </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 32px; align-items: start;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 32px; align-items: start;">
       
       <div style="display: flex; flex-direction: column; gap: 24px;">
         
-        <div style="background-color: #0b0f19; border: 1px solid #1e293b; border-radius: 16px; padding: 32px; position: relative; overflow: hidden; box-shadow: 0 4px 30px rgba(0,0,0,0.4);">
-          <div style="position: absolute; right: 0; top: 0; width: 150px; height: 100%; background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.03) 100%); pointer-events: none;"></div>
-          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div>
-              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                <i class="fa-solid fa-vault" style="color: #9ca3af; font-size: 0.95rem;"></i>
-                <span style="font-size: 0.78rem; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">Live Account Balance</span>
-              </div>
-              <h3 style="margin: 0; font-size: 2.8rem; font-weight: 800; color: #ffffff; letter-spacing: -1px;">$0.00</h3>
-              <p style="margin: 12px 0 0 0; font-size: 0.85rem; color: #6b7280; line-height: 1.5;">Primary consolidated asset accounting protocol. Ready to route into capital placements across the multi-asset index grid framework instantly.</p>
+        <div style="background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 24px; box-shadow: 0 12px 24px rgba(0,0,0,0.25); position: relative; overflow: hidden;">
+          <div style="position: absolute; right: -20px; bottom: -20px; font-size: 8rem; color: rgba(51, 65, 85, 0.12); pointer-events: none; z-index: 1;"><i class="fa-solid fa-vault"></i></div>
+          <div style="position: relative; z-index: 2;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+              <i class="fa-solid fa-wallet" style="color: #64748b; font-size: 0.95rem;"></i>
+              <span style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Live Account Balance</span>
             </div>
-            <div style="background-color: #111827; border: 1px solid #1e293b; padding: 12px; border-radius: 12px; text-align: center; min-width: 90px;">
-              <span style="display: block; font-size: 0.68rem; font-weight: 700; color: #6b7280; text-transform: uppercase; margin-bottom: 4px;">Tier Limit</span>
-              <span style="font-size: 0.9rem; font-weight: 700; color: #3b82f6;">UNLIMITED</span>
-            </div>
+            <h3 style="margin: 0; font-size: 2.3rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">$0.00</h3>
+            <p style="margin: 6px 0 0 0; font-size: 0.8rem; color: #475569;">Primary fiat/crypto combined custody volume allocation.</p>
           </div>
         </div>
 
-        <div style="background-color: #0b0f19; border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; gap: 16px;">
-              <div style="width: 44px; height: 44px; background-color: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                <i class="fa-solid fa-gift" style="color: #10b981; font-size: 1.2rem;"></i>
-              </div>
-              <div>
-                <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Sign-up Promotion Credits</span>
-                <h4 style="margin: 0; font-size: 1.4rem; font-weight: 800; color: #ffffff;">$3.00</h4>
-              </div>
+        <div style="background-color: #0f172a; border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 24px; box-shadow: 0 12px 24px rgba(0,0,0,0.25); position: relative; overflow: hidden;">
+          <div style="position: absolute; right: -15px; bottom: -15px; font-size: 7rem; color: rgba(56, 189, 248, 0.04); pointer-events: none; z-index: 1;"><i class="fa-solid fa-gift"></i></div>
+          <div style="position: relative; z-index: 2;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+              <i class="fa-solid fa-circle-dollar-to-slot" style="color: #38bdf8; font-size: 0.95rem;"></i>
+              <span style="font-size: 0.78rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">New User Promotion</span>
             </div>
-            <span style="font-size: 0.78rem; font-weight: 600; color: #9ca3af; background-color: #111827; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 8px;">Processing Allocation Queue</span>
+            <h3 style="margin: 0; font-size: 1.8rem; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px;">$3.00</h3>
+            <p style="margin: 6px 0 0 0; font-size: 0.8rem; color: #94a3b8;">Registration promotional reward credits locked in process routing queue.</p>
           </div>
         </div>
 
       </div>
 
-      <div style="background-color: #0b0f19; border: 1px solid #1e293b; border-radius: 16px; padding: 28px; box-shadow: 0 4px 30px rgba(0,0,0,0.4);">
-        <h3 style="margin: 0 0 24px 0; font-size: 1.1rem; color: #ffffff; border-bottom: 1px solid #1e293b; padding-bottom: 14px; display: flex; align-items: center; gap: 10px; font-weight: 700;">
-          <i class="fa-solid fa-id-card" style="color: #3b82f6; font-size: 1rem;"></i> Account Vault Dossier
+      <div style="background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 28px; box-shadow: 0 12px 24px rgba(0,0,0,0.25);">
+        <h3 style="margin: 0 0 20px 0; font-size: 1.1rem; color: #f1f5f9; border-bottom: 1px solid #1e293b; padding-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-user-gear" style="color: #64748b;"></i> Authenticated Profile Core Metadata
         </h3>
         
-        <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
           <div>
-            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Profile Account Handle</span>
-            <span id="dash-meta-username" style="font-size: 0.95rem; color: #ffffff; font-weight: 700; background-color: #040812; padding: 8px 14px; border-radius: 8px; display: inline-block; border: 1px solid #1e293b; font-family: monospace;">-</span>
+            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Account Handle Identifier</span>
+            <span id="dash-meta-username" style="font-size: 0.95rem; color: #f8fafc; font-weight: 600; background-color: #060913; padding: 6px 12px; border-radius: 6px; display: inline-block; border: 1px solid #1e293b;">-</span>
           </div>
           <div>
-            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Registered Destination Node</span>
-            <span id="dash-meta-email" style="font-size: 0.95rem; color: #e5e7eb; font-weight: 500;">-</span>
+            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Registered Email Node</span>
+            <span id="dash-meta-email" style="font-size: 0.95rem; color: #f8fafc; font-weight: 500;">-</span>
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
             <div>
-              <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Gender</span>
-              <span id="dash-meta-gender" style="font-size: 0.95rem; color: #e5e7eb; font-weight: 500;">-</span>
+              <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Gender Group</span>
+              <span id="dash-meta-gender" style="font-size: 0.95rem; color: #f8fafc; font-weight: 500;">-</span>
             </div>
             <div>
-              <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Date of Birth</span>
-              <span id="dash-meta-birth" style="font-size: 0.95rem; color: #e5e7eb; font-weight: 500; font-family: monospace;">-</span>
+              <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Date of Birth</span>
+              <span id="dash-meta-birth" style="font-size: 0.95rem; color: #f8fafc; font-weight: 500; font-family: monospace;">-</span>
             </div>
           </div>
           <div>
-            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Database Unique System Key UID</span>
-            <span id="dash-meta-uid" style="font-size: 0.82rem; color: #3b82f6; font-family: monospace; word-break: break-all; background-color: #040812; padding: 10px; border-radius: 8px; display: block; border: 1px solid #1e293b;">-</span>
+            <span style="display: block; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Internal System Database UID Key</span>
+            <span id="dash-meta-uid" style="font-size: 0.82rem; color: #38bdf8; font-family: monospace; word-break: break-all; background-color: rgba(56, 189, 248, 0.04); padding: 8px; border-radius: 6px; display: block; border: 1px solid rgba(56, 189, 248, 0.15);">-</span>
           </div>
         </div>
       </div>
@@ -209,89 +199,85 @@
   </main>
 
   <script>
-    // Asset Core Structural Generation Base Arrays
+    // Blueprint categories mapping out requested financial nodes
     const baseCryptos = [
-      { name: "Bitcoin", ticker: "BTC", basePrice: 64200.00, icon: "fa-brands fa-bitcoin", color: "#f59e0b", category: "CRYPTO" },
-      { name: "Ethereum", ticker: "ETH", basePrice: 3450.00, icon: "fa-brands fa-ethereum", color: "#6366f1", category: "CRYPTO" },
-      { name: "Solana", ticker: "SOL", basePrice: 145.10, icon: "fa-solid fa-cube", color: "#a855f7", category: "CRYPTO" },
-      { name: "Binance Coin", ticker: "BNB", basePrice: 580.25, icon: "fa-solid fa-coins", color: "#f39c12", category: "CRYPTO" },
-      { name: "Ripple", ticker: "XRP", basePrice: 0.49, icon: "fa-solid fa-circle-nodes", color: "#23a2f6", category: "CRYPTO" },
-      { name: "Cardano", ticker: "ADA", basePrice: 0.38, icon: "fa-solid fa-snowflake", color: "#0033ad", category: "CRYPTO" },
-      { name: "Dogecoin", ticker: "DOGE", basePrice: 0.12, icon: "fa-solid fa-paw", color: "#ba9f33", category: "CRYPTO" }
+        { name: "Bitcoin", ticker: "BTC", basePrice: 64200.00, icon: "fa-brands fa-bitcoin", color: "#f59e0b", category: "CRYPTO" },
+        { name: "Tether", ticker: "USDT", basePrice: 1.00, icon: "fa-solid fa-dollar-sign", color: "#10b981", category: "CRYPTO" },
+        { name: "USD Coin", ticker: "USDC", basePrice: 1.00, icon: "fa-solid fa-dollar-sign", color: "#2563eb", category: "CRYPTO" },
+        { name: "Ethereum", ticker: "ETH", basePrice: 3450.00, icon: "fa-brands fa-ethereum", color: "#6366f1", category: "CRYPTO" },
+        { name: "Binance Coin", ticker: "BNB", basePrice: 580.25, icon: "fa-solid fa-coins", color: "#f39c12", category: "CRYPTO" },
+        { name: "Solana", ticker: "SOL", basePrice: 145.10, icon: "fa-solid fa-cube", color: "#a855f7", category: "CRYPTO" }
     ];
 
     const baseIndices = [
-      { name: "S&P 500 Index", ticker: "SPX", basePrice: 5430.20, icon: "fa-solid fa-chart-pie", color: "#ef4444", category: "INDICES" },
-      { name: "Nasdaq 100", ticker: "NDX", basePrice: 19650.75, icon: "fa-solid fa-arrow-trend-up", color: "#3b82f6", category: "INDICES" },
-      { name: "Dow Jones Indus.", ticker: "DJI", basePrice: 39120.00, icon: "fa-solid fa-building", color: "#10b981", category: "INDICES" },
-      { name: "DAX Performance Index", ticker: "DAX", basePrice: 18210.50, icon: "fa-solid fa-landmark", color: "#f59e0b", category: "INDICES" },
-      { name: "FTSE 100 Index", ticker: "UK100", basePrice: 8180.30, icon: "fa-solid fa-crown", color: "#a855f7", category: "INDICES" }
+        { name: "S&P 500 Index", ticker: "SPX", basePrice: 5420.50, icon: "fa-solid fa-chart-line", color: "#ef4444", category: "INDICES" },
+        { name: "Nasdaq 100", ticker: "NDX", basePrice: 19580.25, icon: "fa-solid fa-arrow-trend-up", color: "#3b82f6", category: "INDICES" },
+        { name: "Dow Jones Industrial", ticker: "DJI", basePrice: 39050.00, icon: "fa-solid fa-building", color: "#10b981", category: "INDICES" },
+        { name: "DAX Performance Index", ticker: "DAX", basePrice: 18120.40, icon: "fa-solid fa-landmark", color: "#f59e0b", category: "INDICES" }
     ];
 
     const baseMetals = [
-      { name: "Gold Spot", ticker: "XAU", basePrice: 2330.40, icon: "fa-solid fa-cubes", color: "#fcd34d", category: "METALS" },
-      { name: "Silver Spot", ticker: "XAG", basePrice: 29.25, icon: "fa-solid fa-circle", color: "#9ca3af", category: "METALS" },
-      { name: "Platinum Spot", ticker: "XPT", basePrice: 995.00, icon: "fa-solid fa-gem", color: "#22d3ee" },
-      { name: "Palladium Spot", ticker: "XPD", basePrice: 915.50, icon: "fa-solid fa-ring", color: "#f472b6" }
+        { name: "Gold Spot", ticker: "XAU", basePrice: 2324.80, icon: "fa-solid fa-cubes", color: "#fbbf24", category: "METALS" },
+        { name: "Silver Spot", ticker: "XAG", basePrice: 29.15, icon: "fa-solid fa-circle", color: "#9ca3af", category: "METALS" },
+        { name: "Platinum Spot", ticker: "XPT", basePrice: 988.50, icon: "fa-solid fa-gem", color: "#22d3ee", category: "METALS" }
     ];
 
     const baseETFs = [
-      { name: "SPDR S&P 500 ETF Trust", ticker: "SPY", basePrice: 541.20, icon: "fa-solid fa-packet-check", color: "#e74c3c", category: "ETF" },
-      { name: "Invesco QQQ Trust", ticker: "QQQ", basePrice: 478.50, icon: "fa-solid fa-money-bill-wave", color: "#2563eb", category: "ETF" },
-      { name: "iShares Core S&P 500", ticker: "IVV", basePrice: 542.10, icon: "fa-solid fa-vault", color: "#16a34a", category: "ETF" },
-      { name: "Vanguard Total Stock Market", ticker: "VTI", basePrice: 265.40, icon: "fa-solid fa-globe", color: "#9333ea", category: "ETF" }
+        { name: "SPDR S&P 500 ETF", ticker: "SPY", basePrice: 540.30, icon: "fa-solid fa-box-archive", color: "#ec4899", category: "ETF" },
+        { name: "Invesco QQQ Trust", ticker: "QQQ", basePrice: 476.15, icon: "fa-solid fa-money-bill-trend-up", color: "#6366f1", category: "ETF" },
+        { name: "Vanguard Total Stock Market", ticker: "VTI", basePrice: 264.80, icon: "fa-solid fa-earth-americas", color: "#8b5cf6", category: "ETF" }
     ];
 
     const baseBonds = [
-      { name: "US 10-Year Treasury Note", ticker: "US10Y", basePrice: 4.22, icon: "fa-solid fa-file-invoice-dollar", color: "#14b8a6", category: "BOND" },
-      { name: "US 30-Year Bond Yield", ticker: "US30Y", basePrice: 4.35, icon: "fa-solid fa-file-signature", color: "#f97316", category: "BOND" },
-      { name: "Vanguard Total Bond Market", ticker: "BND", basePrice: 72.80, icon: "fa-solid fa-building-columns", color: "#64748b", category: "BOND" }
+        { name: "US 10-Year Treasury Yield", ticker: "US10Y", basePrice: 4.25, icon: "fa-solid fa-file-invoice-dollar", color: "#14b8a6", category: "BOND" },
+        { name: "US 30-Year Bond Yield", ticker: "US30Y", basePrice: 4.38, icon: "fa-solid fa-file-signature", color: "#f97316", category: "BOND" },
+        { name: "Vanguard Total Bond Market", ticker: "BND", basePrice: 72.40, icon: "fa-solid fa-building-columns", color: "#64748b", category: "BOND" }
     ];
 
-    // Procedural Expansion Loop to build exactly 315 unique high-fidelity tracked assets
+    // Master array expanding system into over 300 targets automatically
     const cryptoAssets = [];
-    let assetCounterId = 1;
+    let incrementalId = 1;
 
-    function buildAssetMatrixPool(baseArray, variationsCount) {
-      baseArray.forEach(base => {
-        // Inject baseline structural asset node first
+    function deployFinancialMatrix(baseArray, variationsCount) {
+      baseArray.forEach(item => {
+        // Base item registration
         cryptoAssets.push({
-          id: assetCounterId++,
-          name: base.name,
-          ticker: base.ticker,
-          basePrice: base.basePrice,
-          currentPrice: base.basePrice,
-          icon: base.icon,
-          color: base.color,
-          category: base.category || "METALS"
+          id: incrementalId++,
+          name: item.name,
+          ticker: item.ticker,
+          basePrice: item.basePrice,
+          currentPrice: item.basePrice,
+          icon: item.icon,
+          color: item.color,
+          category: item.category
         });
 
-        // Loop expand synthetic derivative variants to clear 300+ portfolio desk limits cleanly
-        for (let i = 1; i <= variationsCount; i++) {
-          const multiPriceMultiplier = 0.4 + (Math.random() * 2.2);
+        // Loop expansion creating realistic serial derivatives 
+        for (let idx = 1; idx <= variationsCount; idx++) {
+          const shiftFactor = 0.35 + (Math.random() * 2.15);
           cryptoAssets.push({
-            id: assetCounterId++,
-            name: `${base.name} Ser. ${String.fromCharCode(64 + (i % 26))}${i}`,
-            ticker: `${base.ticker}-${i}X`,
-            basePrice: base.basePrice * multiPriceMultiplier,
-            currentPrice: base.basePrice * multiPriceMultiplier,
-            icon: base.icon,
-            color: base.color,
-            category: base.category || "METALS"
+            id: incrementalId++,
+            name: `${item.name} Series ${String.fromCharCode(64 + (idx % 26))}${idx}`,
+            ticker: `${item.ticker}-${idx}X`,
+            basePrice: item.basePrice * shiftFactor,
+            currentPrice: item.basePrice * shiftFactor,
+            icon: item.icon,
+            color: item.color,
+            category: item.category
           });
         }
       });
     }
 
-    // Call expansion sequence array maps
-    buildAssetMatrixPool(baseCryptos, 12); // ~91 items
-    buildAssetMatrixPool(baseIndices, 14); // ~75 items
-    buildAssetMatrixPool(baseMetals, 12);  // ~52 items
-    buildAssetMatrixPool(baseETFs, 15);    // ~64 items
-    buildAssetMatrixPool(baseBonds, 11);   // ~48 items Totaling: 330 items
+    // High performance population parameters tracking up to 304 assets
+    deployFinancialMatrix(baseCryptos, 14); // 90 nodes
+    deployFinancialMatrix(baseIndices, 14); // 60 nodes
+    deployFinancialMatrix(baseMetals, 14);  // 45 nodes
+    deployFinancialMatrix(baseETFs, 15);    // 64 nodes
+    deployFinancialMatrix(baseBonds, 14);   // 45 nodes
 
     const SPREAD_MARGIN_RATE = (65000 - 61000) / 65000;
-    let currentCategoryFilter = "ALL";
+    let currentTabFilter = "ALL";
     let lastFilterString = "";
 
     function toggleCryptoMenu() {
@@ -303,8 +289,8 @@
       }
     }
 
-    function filterCategory(category) {
-      currentCategoryFilter = category;
+    function switchMarketTab(targetTab) {
+      currentTabFilter = targetTab;
       renderMatrixCards();
     }
 
@@ -316,14 +302,14 @@
       lastFilterString = filterString;
       
       const matchedTokens = cryptoAssets.filter(token => {
-        const matchesCategory = (currentCategoryFilter === "ALL" || token.category === currentCategoryFilter);
-        const matchesSearch = token.name.toLowerCase().includes(filterString.toLowerCase()) || 
-                              token.ticker.toLowerCase().includes(filterString.toLowerCase());
-        return matchesCategory && matchesSearch;
+        const structuralTabMatch = (currentTabFilter === "ALL" || token.category === currentTabFilter);
+        const searchInputMatch = token.name.toLowerCase().includes(filterString.toLowerCase()) || 
+                                 token.ticker.toLowerCase().includes(filterString.toLowerCase());
+        return structuralTabMatch && searchInputMatch;
       });
 
       if (matchedTokens.length === 0) {
-        gridContainer.innerHTML = `<div style="text-align: center; padding: 40px 10px; color: #475569; font-size: 0.88rem;">No broker desk assets match active parameters.</div>`;
+        gridContainer.innerHTML = `<div style="text-align: center; padding: 40px 10px; color: #475569; font-size: 0.88rem;">No assets match criteria in this category.</div>`;
         return;
       }
 
@@ -335,32 +321,32 @@
         if (token.currentPrice < 0.0001) formattingPrecision = 8;
 
         const tokenItem = document.createElement("div");
-        tokenItem.id = `asset-card-${token.id}`;
-        tokenItem.style.backgroundColor = "#111827";
-        tokenItem.style.border = "1px solid #1e293b";
+        tokenItem.id = `asset-row-${token.id}`;
+        tokenItem.style.backgroundColor = "#1e293b";
+        tokenItem.style.border = "1px solid #334155";
         tokenItem.style.borderRadius = "10px";
-        tokenItem.style.padding = "14px 16px";
+        tokenItem.style.padding = "12px";
         tokenItem.style.display = "flex";
         tokenItem.style.justifyContent = "space-between";
         tokenItem.style.alignItems = "center";
         tokenItem.style.boxSizing = "border-box";
-        tokenItem.style.transition = "all 0.2s ease";
+        tokenItem.style.transition = "background-color 0.2s ease";
 
         tokenItem.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: ${token.color};">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: ${token.color};">
               <i class="${token.icon}"></i>
             </div>
             <div>
-              <h4 style="margin: 0; font-size: 0.85rem; color: #f3f4f6; font-weight: 600; max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${token.name}</h4>
-              <span style="font-size: 0.7rem; color: #6b7280; font-family: monospace; text-transform: uppercase; background-color: #0b0f19; padding: 2px 6px; border-radius: 4px; border: 1px solid #1e293b; margin-top: 2px; display: inline-block;">${token.ticker}</span>
+              <h4 style="margin: 0; font-size: 0.85rem; color: #f1f5f9; font-weight: 600; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${token.name}</h4>
+              <span style="font-size: 0.72rem; color: #64748b; font-family: monospace; text-transform: uppercase;">${token.ticker}</span>
             </div>
           </div>
-          <div style="text-align: right; display: flex; flex-direction: column; gap: 2px; align-items: flex-end;">
-            <div id="price-display-${token.id}" style="font-size: 0.9rem; color: #10b981; font-weight: 700;">$${discountPrice.toFixed(formattingPrecision)}</div>
-            <div id="spot-display-${token.id}" style="font-size: 0.72rem; color: #4b5563; text-decoration: line-through;">$${token.currentPrice.toFixed(formattingPrecision)}</div>
-            <a href="deposit.html" style="background-color: #3b82f6; color: #ffffff; text-decoration: none; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; transition: background 0.2s;">
-              Buy <i class="fa-solid fa-angle-right" style="font-size: 0.65rem;"></i>
+          <div style="text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: flex-end;">
+            <div id="runtime-discount-${token.id}" style="font-size: 0.88rem; color: #10b981; font-weight: 700;">$${discountPrice.toFixed(formattingPrecision)}</div>
+            <div id="runtime-spot-${token.id}" style="font-size: 0.7rem; color: #64748b; text-decoration: line-through;">$${token.currentPrice.toFixed(formattingPrecision)}</div>
+            <a href="deposit.html" style="background-color: #38bdf8; color: #0f172a; text-decoration: none; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; margin-top: 2px;">
+              Buy <i class="fa-solid fa-cart-shopping" style="font-size: 0.65rem;"></i>
             </a>
           </div>
         `;
@@ -368,55 +354,52 @@
       });
     }
 
-    // High-Frequency Realtime Fluctuation Simulation Tick Engine
-    function startBrokerTickEngine() {
+    // Dynamic Price Modification Engine Loops
+    function deployMarketTickEngine() {
       setInterval(() => {
-        // Pick 15 random assets out of the full pool to mutate per tick cycle sequence
-        for (let i = 0; i < 15; i++) {
+        // Mutate 10 random targets from the extended list every second
+        for (let i = 0; i < 10; i++) {
           const randomIndex = Math.floor(Math.random() * cryptoAssets.length);
           const targetAsset = cryptoAssets[randomIndex];
           
-          // Generate realistic fluctuation margin (-0.45% to +0.45%)
-          const tickVariance = 1 + ((Math.random() - 0.5) * 0.009);
-          const previousPrice = targetAsset.currentPrice;
-          targetAsset.currentPrice = targetAsset.currentPrice * tickVariance;
-          
-          // Protect asset bounds baseline indexes
-          if (targetAsset.currentPrice <= 0.000001) targetAsset.currentPrice = 0.005;
+          const shiftMargin = 1 + ((Math.random() - 0.5) * 0.006); // Up or down variance bounds
+          const oldPrice = targetAsset.currentPrice;
+          targetAsset.currentPrice = targetAsset.currentPrice * shiftMargin;
 
-          // Target DOM components safely for immediate live viewport updating loops
-          const priceDisplay = document.getElementById(`price-display-${targetAsset.id}`);
-          const spotDisplay = document.getElementById(`spot-display-${targetAsset.id}`);
-          const structuralCard = document.getElementById(`asset-card-${targetAsset.id}`);
+          if (targetAsset.currentPrice <= 0) targetAsset.currentPrice = 0.01;
 
-          if (priceDisplay && spotDisplay) {
+          // Target nodes
+          const discountValNode = document.getElementById(`runtime-discount-${targetAsset.id}`);
+          const spotValNode = document.getElementById(`runtime-spot-${targetAsset.id}`);
+          const interfaceRow = document.getElementById(`asset-row-${targetAsset.id}`);
+
+          if (discountValNode && spotValNode) {
             let formattingPrecision = 2;
             if (targetAsset.currentPrice < 0.01) formattingPrecision = 4;
             if (targetAsset.currentPrice < 0.0001) formattingPrecision = 8;
 
-            const nextDiscountPrice = targetAsset.currentPrice * (1 - SPREAD_MARGIN_RATE);
-            priceDisplay.textContent = `$${nextDiscountPrice.toFixed(formattingPrecision)}`;
-            spotDisplay.textContent = `$${targetAsset.currentPrice.toFixed(formattingPrecision)}`;
+            const trackingDiscount = targetAsset.currentPrice * (1 - SPREAD_MARGIN_RATE);
+            discountValNode.textContent = `$${trackingDiscount.toFixed(formattingPrecision)}`;
+            spotValNode.textContent = `$${targetAsset.currentPrice.toFixed(formattingPrecision)}`;
 
-            // Trigger premium flash visualization frames directly onto the UI elements
-            if (targetAsset.currentPrice >= previousPrice) {
-              priceDisplay.style.color = "#10b981";
-              if (structuralCard) {
-                structuralCard.classList.remove("tick-up", "tick-down");
-                void structuralCard.offsetWidth; // Force element reflow animation reset execution
-                structuralCard.classList.add("tick-up");
+            if (targetAsset.currentPrice >= oldPrice) {
+              discountValNode.style.color = "#10b981";
+              if (interfaceRow) {
+                interfaceRow.classList.remove("up-tick", "down-tick");
+                void interfaceRow.offsetWidth; // Clear animation frame context registers
+                interfaceRow.classList.add("up-tick");
               }
             } else {
-              priceDisplay.style.color = "#ef4444";
-              if (structuralCard) {
-                structuralCard.classList.remove("tick-up", "tick-down");
-                void structuralCard.offsetWidth;
-                structuralCard.classList.add("tick-down");
+              discountValNode.style.color = "#ef4444";
+              if (interfaceRow) {
+                interfaceRow.classList.remove("up-tick", "down-tick");
+                void interfaceRow.offsetWidth;
+                interfaceRow.classList.add("down-tick");
               }
             }
           }
         }
-      }, 1000); // Ticks run every 1000ms
+      }, 1000);
     }
 
     function parseSecureUserContext() {
@@ -451,12 +434,12 @@
       if(uidEl) uidEl.textContent = currentUserData.uid;
 
       renderMatrixCards();
-      startBrokerTickEngine();
+      deployMarketTickEngine();
     }
 
     function terminateUserSession() {
       localStorage.removeItem("authenticated_current_user");
-      window.location.href = "login.html"; // Clear redirection target applied
+      window.location.href = "login.html";
     }
 
     document.addEventListener("DOMContentLoaded", parseSecureUserContext);
