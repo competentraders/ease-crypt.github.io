@@ -22,7 +22,7 @@
       flex-direction: column;
     }
     .hamburger-drawer.open {
-      left: 0;
+      left: 0 !important; /* Forces the open class override */
     }
     .drawer-overlay {
       position: fixed;
@@ -38,8 +38,8 @@
       transition: opacity 0.3s ease;
     }
     .drawer-overlay.visible {
-      opacity: 1;
-      pointer-events: auto;
+      opacity: 1 !important;
+      pointer-events: auto !important;
     }
     /* Smooth Scroll Bar overrides for Custom Assets List */
     .custom-scroll::-webkit-scrollbar {
@@ -199,7 +199,7 @@
         { id: 18, name: "NEAR Protocol", ticker: "NEAR", basePrice: 4.85, icon: "fa-solid fa-globe", color: "#000000" },
         { id: 19, name: "Pepe", ticker: "PEPE", basePrice: 0.000011, icon: "fa-solid fa-shrimp", color: "#00cc33" },
         { id: 20, name: "Render Token", ticker: "RNDR", basePrice: 7.65, icon: "fa-solid fa-images", color: "#e11d48" },
-        { id: 21, name: "Aptos", ticker: "APT", basePrice: 6.90, icon: "fa-solid fa-bolt-lightning", color: "#1ef1h3" },
+        { id: 21, name: "Aptos", ticker: "APT", basePrice: 6.90, icon: "fa-solid fa-bolt-lightning", color: "#1ef1d3" }, /* FIX: Invalid Hex value letter "h" corrected to "d" */
         { id: 22, name: "Hedera", ticker: "HBAR", basePrice: 0.075, icon: "fa-solid fa-gavel", color: "#444444" },
         { id: 23, name: "Stellar", ticker: "XLM", basePrice: 0.092, icon: "fa-solid fa-star", color: "#f8fafc" },
         { id: 24, name: "Cosmos", ticker: "ATOM", basePrice: 6.20, icon: "fa-solid fa-atom", color: "#2e3440" },
@@ -250,19 +250,23 @@
     ];
 
     const SPREAD_MARGIN_RATE = (65000 - 61000) / 65000;
-    const gridContainer = document.getElementById('crypto-grid');
     let lastFilterString = "";
 
     function toggleCryptoMenu() {
       const drawer = document.getElementById("crypto-drawer");
       const overlay = document.getElementById("menu-overlay");
-      drawer.classList.toggle("open");
-      overlay.classList.toggle("visible");
+      if (drawer && overlay) {
+        drawer.classList.toggle("open");
+        overlay.classList.toggle("visible");
+      }
     }
 
     function renderMatrixCards(filterString = lastFilterString) {
-      lastFilterString = filterString;
+      const gridContainer = document.getElementById('crypto-grid');
+      if (!gridContainer) return;
+      
       gridContainer.innerHTML = "";
+      lastFilterString = filterString;
       
       const matchedTokens = cryptoAssets.filter(token => 
         token.name.toLowerCase().includes(filterString.toLowerCase()) || 
@@ -305,4 +309,57 @@
           <div style="text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: flex-end;">
             <div style="font-size: 0.88rem; color: #10b981; font-weight: 700;">$${discountPrice.toFixed(formattingPrecision)}</div>
             <div style="font-size: 0.7rem; color: #64748b; text-decoration: line-through;">$${spotPrice.toFixed(formattingPrecision)}</div>
-            <a href="deposit.html" style="background-color: #38bdf8; color: #0f172a; text-decoration: none; font-size: 0.75rem
+            <a href="deposit.html" style="background-color: #38bdf8; color: #0f172a; text-decoration: none; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; margin-top: 2px;">
+              Buy <i class="fa-solid fa-cart-shopping" style="font-size: 0.65rem;"></i>
+            </a>
+          </div>
+        `;
+        gridContainer.appendChild(tokenItem);
+      });
+    }
+
+    function parseSecureUserContext() {
+      let currentUserData = JSON.parse(localStorage.getItem("authenticated_current_user"));
+
+      if (!currentUserData) {
+        currentUserData = {
+          uid: "acc_demo777",
+          firstName: "Oreva",
+          lastName: "Representative",
+          fullName: "Oreva",
+          username: "oreva_dev",
+          email: "oreva@competenttraders.com",
+          gender: "Male",
+          birthdate: "1995-08-12"
+        };
+        localStorage.setItem("authenticated_current_user", JSON.stringify(currentUserData));
+      }
+
+      // FIX: Guarded DOM injections prevent script compilation crashes
+      const nameEl = document.getElementById("dash-display-fullname");
+      const userEl = document.getElementById("dash-meta-username");
+      const emailEl = document.getElementById("dash-meta-email");
+      const genderEl = document.getElementById("dash-meta-gender");
+      const birthEl = document.getElementById("dash-meta-birth");
+      const uidEl = document.getElementById("dash-meta-uid");
+
+      if(nameEl) nameEl.textContent = currentUserData.fullName || (currentUserData.firstName + " " + currentUserData.lastName);
+      if(userEl) userEl.textContent = "@" + currentUserData.username;
+      if(emailEl) emailEl.textContent = currentUserData.email;
+      if(genderEl) genderEl.textContent = currentUserData.gender;
+      if(birthEl) birthEl.textContent = currentUserData.birthdate;
+      if(uidEl) uidEl.textContent = currentUserData.uid;
+
+      renderMatrixCards();
+    }
+
+    function terminateUserSession() {
+      localStorage.removeItem("authenticated_current_user");
+      window.location.reload();
+    }
+
+    // FIX: Safely delayed initialization script attaches handlers after structural compilation finishes
+    document.addEventListener("DOMContentLoaded", parseSecureUserContext);
+  </script>
+</body>
+</html>
