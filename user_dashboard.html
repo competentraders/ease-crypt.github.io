@@ -75,6 +75,18 @@
       color: #0f172a;
       border-color: #38bdf8;
     }
+    
+    /* Price update pulse animations */
+    @keyframes priceUp {
+      0% { background-color: rgba(16, 185, 129, 0.2); }
+      100% { background-color: transparent; }
+    }
+    @keyframes priceDown {
+      0% { background-color: rgba(239, 68, 68, 0.2); }
+      100% { background-color: transparent; }
+    }
+    .flash-up { animation: priceUp 0.8s ease-out; }
+    .flash-down { animation: priceDown 0.8s ease-out; }
   </style>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #060913; color: #f8fafc; min-height: 100vh; box-sizing: border-box;">
@@ -124,18 +136,12 @@
     </div>
     
     <button onclick="terminateUserSession()" style="background-color: rgba(239, 68, 68, 0.08); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s;">
-      <i class="fa-solid fa-right-from-bracket"></i> <span><a href="login.html">Log Out</a></span>
+      <i class="fa-solid fa-right-from-bracket"></i> <span><a href="login.html" style="color: inherit; text-decoration: none;">Log Out</a></span>
     </button>
   </nav>
 
-
   <main style="max-width: 1200px; margin: 32px auto; padding: 0 16px; box-sizing: border-box;">
     
-    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1px solid #334155; border-radius: 16px; padding: 28px; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
-      <div>
-<br>
-
-
     <!-- Action Banner with Responsive Navigation Buttons -->
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1px solid #334155; border-radius: 16px; padding: 28px; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;">
       
@@ -161,14 +167,7 @@
       </div>
     </div>
 
-
-
-
-<br>
- 
-
-
-
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1px solid #334155; border-radius: 16px; padding: 20px; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
       <div style="background-color: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.2); padding: 8px 16px; border-radius: 30px; display: flex; align-items: center; gap: 8px;">
         <span style="width: 8px; height: 8px; background-color: #10b981; border-radius: 50%; display: inline-block;"></span>
         <span style="font-size: 0.78rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">Live ease-crypt network Feed Active</span>
@@ -241,7 +240,7 @@
   </main>
 
   <script>
-    // 100% Legitimate Global Market Asset Registry 
+    // Global Market Asset Registry 
     const cryptoAssets = [
         // --- CRYPTOCURRENCY ---
         { id: 1, name: "Bitcoin", ticker: "BTC", basePrice: 64200.00, icon: "fa-brands fa-bitcoin", color: "#f59e0b", cat: "CRYPTO" },
@@ -350,6 +349,7 @@
     const SPREAD_MARGIN_RATE = (65000 - 61000) / 65000;
     let selectedCategory = "ALL";
     let lastFilterString = "";
+    const priceCache = {};
 
     function toggleCryptoMenu() {
       const drawer = document.getElementById("crypto-drawer");
@@ -360,24 +360,49 @@
       }
     }
 
-    // Modern Tab Filtering Engine
     function switchMarketTab(category) {
       selectedCategory = category;
-      
-      // Update UI Active states
       document.querySelectorAll('.market-tab').forEach(tab => {
         tab.classList.remove('active');
       });
       document.getElementById(`tab-${category}`).classList.add('active');
-      
       renderMatrixCards();
+    }
+
+    // High Performance Live Fluctuations Engine 
+    function initializePriceTickSimulation() {
+      setInterval(() => {
+        // Select 3 to 6 assets at random to fluctuate simultaneously each tick
+        const itemsToUpdateCount = Math.floor(Math.random() * 4) + 3;
+        
+        for (let i = 0; i < itemsToUpdateCount; i++) {
+          const targetIndex = Math.floor(Math.random() * cryptoAssets.length);
+          const asset = cryptoAssets[targetIndex];
+          
+          // Generate realistic micro-movements (-0.15% to +0.15%)
+          const percentageMovement = (Math.random() * 0.3 - 0.15) / 100;
+          const originalPrice = asset.basePrice;
+          asset.basePrice = originalPrice * (1 + percentageMovement);
+          
+          // Track direction of movement for custom UI visual pulses
+          const elementKey = `asset-price-${asset.id}`;
+          const currentDOMElement = document.getElementById(elementKey);
+          if (currentDOMElement) {
+            const isUpwardNode = asset.basePrice > originalPrice;
+            currentDOMElement.classList.remove('flash-up', 'flash-down');
+            void currentDOMElement.offsetWidth; // Trigger reflow
+            currentDOMElement.classList.add(isUpwardNode ? 'flash-up' : 'flash-down');
+          }
+        }
+        // Force asynchronous visual update without destroying layout state
+        renderMatrixCards();
+      }, 2500);
     }
 
     function renderMatrixCards(filterString = lastFilterString) {
       const gridContainer = document.getElementById('crypto-grid');
       if (!gridContainer) return;
       
-      gridContainer.innerHTML = "";
       lastFilterString = filterString;
       
       const matchedTokens = cryptoAssets.filter(token => {
@@ -392,6 +417,7 @@
         return;
       }
 
+      // Dynamic patch mechanism to update prices without disrupting scroll status
       matchedTokens.forEach(token => {
         const spotPrice = token.basePrice;
         const discountPrice = spotPrice * (1 - SPREAD_MARGIN_RATE);
@@ -400,15 +426,23 @@
         if (token.basePrice < 1.0) formattingPrecision = 4;
         if (token.basePrice < 0.001) formattingPrecision = 6;
 
-        const tokenItem = document.createElement("div");
-        tokenItem.style.backgroundColor = "#1e293b";
-        tokenItem.style.border = "1px solid #334155";
-        tokenItem.style.borderRadius = "10px";
-        tokenItem.style.padding = "12px";
-        tokenItem.style.display = "flex";
-        tokenItem.style.justifyContent = "space-between";
-        tokenItem.style.alignItems = "center";
-        tokenItem.style.boxSizing = "border-box";
+        const containerId = `asset-row-${token.id}`;
+        let tokenItem = document.getElementById(containerId);
+
+        if (!tokenItem) {
+          tokenItem = document.createElement("div");
+          tokenItem.id = containerId;
+          tokenItem.style.backgroundColor = "#1e293b";
+          tokenItem.style.border = "1px solid #334155";
+          tokenItem.style.borderRadius = "10px";
+          tokenItem.style.padding = "12px";
+          tokenItem.style.display = "flex";
+          tokenItem.style.justifyContent = "space-between";
+          tokenItem.style.alignItems = "center";
+          tokenItem.style.boxSizing = "border-box";
+          tokenItem.style.transition = "background-color 0.4s ease";
+          gridContainer.appendChild(tokenItem);
+        }
 
         tokenItem.innerHTML = `
           <div style="display: flex; align-items: center; gap: 10px;">
@@ -420,7 +454,7 @@
               <span style="font-size: 0.72rem; color: #64748b; font-family: monospace; text-transform: uppercase;">${token.ticker}</span>
             </div>
           </div>
-          <div style="text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: flex-end;">
+          <div id="asset-price-${token.id}" style="text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; padding: 2px 6px; border-radius: 4px;">
             <div style="font-size: 0.88rem; color: #10b981; font-weight: 700;">$${discountPrice.toFixed(formattingPrecision)}</div>
             <div style="font-size: 0.7rem; color: #64748b; text-decoration: line-through;">$${spotPrice.toFixed(formattingPrecision)}</div>
             <a href="deposit.html" style="background-color: #38bdf8; color: #0f172a; text-decoration: none; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; margin-top: 2px;">
@@ -428,7 +462,15 @@
             </a>
           </div>
         `;
-        gridContainer.appendChild(tokenItem);
+      });
+
+      // Clear structural elements that no longer pass our active filter category
+      Array.from(gridContainer.children).forEach(childElement => {
+        const structuralId = parseInt(childElement.id.replace('asset-row-', ''));
+        const fitsActiveFilter = matchedTokens.some(t => t.id === structuralId);
+        if(!fitsActiveFilter) {
+          childElement.remove();
+        }
       });
     }
 
@@ -464,6 +506,7 @@
       if(uidEl) uidEl.textContent = currentUserData.uid;
 
       renderMatrixCards();
+      initializePriceTickSimulation();
     }
 
     function terminateUserSession() {
