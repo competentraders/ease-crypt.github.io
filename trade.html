@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mobile Trading Terminal</title>
+  <!-- Icon Libraries -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #131722;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #e1e6eb;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    * { box-sizing: border-box; }
+
+    /* Mobile Vertical Stack Layout Engine */
+    .mobile-terminal {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* 1. Header Infrastructure Node */
+    .header-node {
+      background-color: #1c2030;
+      border-bottom: 1px solid #242936;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* Interactive Asset Selector Element */
+    .asset-branding {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background-color: #131722;
+      padding: 4px 6px;
+      border-radius: 4px;
+      border: 1px solid #242936;
+      max-width: 55%;
+    }
+    .asset-select {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
+      text-overflow: ellipsis;
+    }
+    .asset-select option {
+      background-color: #1c2030;
+      color: #ffffff;
+    }
+    .live-price-badge { font-family: monospace; font-size: 14px; font-weight: 800; text-align: right; }
+    
+    /* Dedicated Mobile Funding Suite Links */
+    .mobile-funding-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .funding-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 0;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: opacity 0.15s ease;
+    }
+    .lnk-deposit { background-color: #00b09b; color: #ffffff; }
+    .lnk-withdraw { background-color: rgba(240, 185, 11, 0.1); color: #f0b90b; border: 1px solid rgba(240, 185, 11, 0.3); }
+    .funding-link:active { opacity: 0.7; }
+
+    /* 2. Chart Screen Workspace Block */
+    .chart-viewport-box {
+      flex: 1;
+      background-color: #131722;
+      position: relative;
+      border-bottom: 1px solid #242936;
+    }
+
+    /* 3. Split Component Data Row */
+    .split-data-hub {
+      height: 220px;
+      background-color: #161a25;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      border-bottom: 1px solid #242936;
+    }
+
+    /* Mobile Orderbook View */
+    .compact-orderbook {
+      border-right: 1px solid #242936;
+      display: flex;
+      flex-direction: column;
+      padding: 6px 0;
+      font-family: monospace;
+      font-size: 11px;
+    }
+    .ob-stream-header {
+      display: flex;
+      justify-content: space-between;
+      color: #5d6580;
+      padding: 0 10px 4px 10px;
+      font-weight: bold;
+    }
+    .ob-row-mobile {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 10px;
+    }
+    .ob-price-lbl { font-weight: bold; }
+    .ob-amt-lbl { color: #b5b9c4; }
+    .color-up { color: #26a69a; }
+    .color-down { color: #ef5350; }
+
+    .mid-spread-strip {
+      background-color: #131722;
+      padding: 4px 10px;
+      font-weight: bold;
+      text-align: center;
+      border-top: 1px solid #242936;
+      border-bottom: 1px solid #242936;
+      font-size: 12px;
+    }
+
+    /* Mobile Form Ticket Box with Internal Buy/Sell Switch Toggles */
+    .mobile-ticket-form {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: #131722;
+    }
+    .action-type-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background-color: #161a25;
+      border-radius: 4px;
+      padding: 2px;
+      margin-bottom: 8px;
+    }
+    .tab-btn {
+      border: none;
+      background: transparent;
+      color: #787f99;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 0;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .tab-btn.active-buy { background-color: #26a69a; color: white; }
+    .tab-btn.active-sell { background-color: #ef5350; color: white; }
+
+    .form-input-element {
+      display: flex;
+      background-color: #1c2030;
+      border: 1px solid #242936;
+      border-radius: 4px;
+      margin-bottom: 6px;
+      align-items: center;
+      padding: 0 6px;
+    }
+    .form-lbl { font-size: 10px; color: #787f99; font-weight: bold; width: 35px; }
+    .form-input {
+      background: transparent;
+      border: none;
+      width: 100%;
+      color: #ffffff;
+      padding: 6px;
+      font-family: monospace;
+      text-align: right;
+      outline: none;
+      font-size: 12px;
+    }
+    .asset-label { font-size: 10px; color: #787f99; font-weight: bold; padding-left: 4px; text-transform: uppercase; }
+
+    .action-submit-btn {
+      width: 100%;
+      padding: 10px 0;
+      background: #26a69a;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .action-submit-btn.sell-mode { background: #ef5350; }
+
+    /* 4. Mini Footer Position Bar */
+    .mini-pos-bar {
+      height: 34px;
+      background-color: #1c2030;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      font-size: 11px;
+      color: #787f99;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-terminal">
+    
+    <!-- 1. Header Infrastructure Node -->
+    <header class="header-node">
+      <div class="header-top-row">
+        <div class="asset-branding">
+          <i class="fa-solid fa-earth-americas" style="color: #38bdf8; font-size: 12px;"></i>
+          <!-- Dynamically Populated Dropdown Element Container -->
+          <select id="asset-selector" class="asset-select" onchange="handleAssetChange(this.value)"></select>
+        </div>
+        <div id="m-live-price" class="live-price-badge color-up">--</div>
+      </div>
+      
+      <!-- Funding Targets Links -->
+      <div class="mobile-funding-box">
+        <a href="deposit.html" class="funding-link lnk-deposit">
+          <i class="fa-solid fa-wallet"></i> Deposit
+        </a>
+        <a href="withdraw.html" class="funding-link lnk-withdraw">
+          <i class="fa-solid fa-money-bill-transfer"></i> Withdraw
+        </a>
+      </div>
+    </header>
+
+    <!-- 2. Chart Screen Workspace Block -->
+    <section class="chart-viewport-box">
+      <div id="tradingview_mobile_chart" style="width: 100%; height: 100%;"></div>
+    </section>
+
+    <!-- 3. Dual-Channel Component Data Deck Frame -->
+    <section class="split-data-hub">
+      
+      <!-- Dynamic Orderbook Node -->
+      <div class="compact-orderbook">
+        <div class="ob-stream-header">
+          <span>Price</span>
+          <span id="ob-size-header">Size</span>
+        </div>
+        <div id="m-asks-container" style="display:flex; flex-direction:column-reverse; flex:1; justify-content:end;"></div>
+        <div class="mid-spread-strip color-up" id="m-spread-price">--</div>
+        <div id="m-bids-container" style="flex:1;"></div>
+      </div>
+
+      <!-- Order Ticket Box with Tab Controls -->
+      <div class="mobile-ticket-form">
+        <div>
+          <!-- Buy / Sell Toggle Tabs -->
+          <div class="action-type-tabs">
+            <button id="tab-buy" class="tab-btn active-buy" onclick="setTradeMode('buy')">Buy</button>
+            <button id="tab-sell" class="tab-btn" onclick="setTradeMode('sell')">Sell</button>
+          </div>
+
+          <div class="form-input-element">
+            <span class="form-lbl">Price</span>
+            <input type="text" class="form-input" value="--" id="form-price-val" disabled>
+          </div>
+          <div class="form-input-element">
+            <span class="form-lbl">Amt</span>
+            <input type="number" class="form-input" placeholder="100" id="form-amount-input">
+            <span id="form-asset-token" class="asset-label">--</span>
+          </div>
+        </div>
+
+        <button id="submit-order-btn" class="action-submit-btn" onclick="alert('Order Dispatched to Liquidity Provider Provider Pool')">Buy Long</button>
+      </div>
+
+    </section>
+
+    <!-- 4. Structural Mobile Mini Footer Bar -->
+    <footer class="mini-pos-bar">
+      <span><i class="fa-solid fa-folder-open" style="margin-right:4px;"></i> Positions (0)</span>
+      <span style="font-family:monospace; font-size:10px; color:#475569;">MULTI-ASSET NODE</span>
+    </footer>
+
+  </div>
+
+  <!-- TradingView Base Integration Script -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+    
+    // Comprehensive Institutional 102 Market Dataset Matrix
+    const marketAssetConfig = {
+      // === FOREX MAJORS & MINORS (50+ PAIRS) ===
+      "EURUSD": { label: "EUR / USD (Euro)", basePrice: 1.08420, stepSize: 0.00015, decimals: 5, tvSymbol: "FX:EURUSD", unit: "eur" },
+      "GBPUSD": { label: "GBP / USD (Pound)", basePrice: 1.26340, stepSize: 0.00018, decimals: 5, tvSymbol: "FX:GBPUSD", unit: "gbp" },
+      "USDJPY": { label: "USD / JPY (Yen)", basePrice: 151.420, stepSize: 0.025, decimals: 3, tvSymbol: "FX:USDJPY", unit: "usd" },
+      "AUDUSD": { label: "AUD / USD (Aussie)", basePrice: 0.65210, stepSize: 0.00012, decimals: 5, tvSymbol: "FX:AUDUSD", unit: "aud" },
+      "USDCAD": { label: "USD / CAD (Loonie)", basePrice: 1.35640, stepSize: 0.00014, decimals: 5, tvSymbol: "FX:USDCAD", unit: "usd" },
+      "USDCHF": { label: "USD / CHF (Swiss)", basePrice: 0.90180, stepSize: 0.00011, decimals: 5, tvSymbol: "FX:USDCHF", unit: "usd" },
+      "NZDUSD": { label: "NZD / USD (Kiwi)", basePrice: 0.59820, stepSize: 0.00012, decimals: 5, tvSymbol: "FX:NZDUSD", unit: "nzd" },
+      "EURGBP": { label: "EUR / GBP", basePrice: 0.85720, stepSize: 0.00009, decimals: 5, tvSymbol: "FX:EURGBP", unit: "eur" },
+      "EURJPY": { label: "EUR / JPY", basePrice: 164.250, stepSize: 0.028, decimals: 3, tvSymbol: "FX:EURJPY", unit: "eur" },
+      "GBPJPY": { label: "GBP / JPY", basePrice: 191.450, stepSize: 0.035, decimals: 3, tvSymbol: "FX:GBPJPY", unit: "gbp" },
+      "AUDJPY": { label: "AUD / JPY", basePrice: 98.750, stepSize: 0.022, decimals: 3, tvSymbol: "FX:AUDJPY", unit: "aud" },
+      "EURAUD": { label: "EUR / AUD", basePrice: 1.66200, stepSize: 0.00022, decimals: 5, tvSymbol: "FX:EURAUD", unit: "eur" },
+      "EURCAD": { label: "EUR / CAD", basePrice: 1.47100, stepSize: 0.00018, decimals: 5, tvSymbol: "FX:EURCAD", unit: "eur" },
+      "EURCHF": { label: "EUR / CHF", basePrice: 0.97800, stepSize: 0.00012, decimals: 5, tvSymbol: "FX:EURCHF", unit: "eur" },
+      "EURNZD": { label: "EUR / NZD", basePrice: 1.81200, stepSize: 0.00025, decimals: 5, tvSymbol: "FX:EURNZD", unit: "eur" },
+      "GBPAUD": { label: "GBP / AUD", basePrice: 1.93800, stepSize: 0.00026, decimals: 5, tvSymbol: "FX:GBPAUD", unit: "gbp" },
+      "GBPCAD": { label: "GBP / CAD", basePrice: 1.71400, stepSize: 0.00022, decimals: 5, tvSymbol: "FX:GBPCAD", unit: "gbp" },
+      "GBPCHF": { label: "GBP / CHF", basePrice: 1.13900, stepSize: 0.00016, decimals: 5, tvSymbol: "FX:GBPCHF", unit: "gbp" },
+      "GBPNZD": { label: "GBP / NZD", basePrice: 2.11200, stepSize: 0.00028, decimals: 5, tvSymbol: "FX:GBPNZD", unit: "gbp" },
+      "AUDCAD": { label: "AUD / CAD", basePrice: 0.88450, stepSize: 0.00014, decimals: 5, tvSymbol: "FX:AUDCAD", unit: "aud" },
+      "AUDCHF": { label: "AUD / CHF", basePrice: 0.58800, stepSize: 0.00011, decimals: 5, tvSymbol: "FX:AUDCHF", unit: "aud" },
+      "AUDNZD": { label: "AUD / NZD", basePrice: 1.09100, stepSize: 0.00015, decimals: 5, tvSymbol: "FX:AUDNZD", unit: "aud" },
+      "CADJPY": { label: "CAD / JPY", basePrice: 111.600, stepSize: 0.024, decimals: 3, tvSymbol: "FX:CADJPY", unit: "cad" },
+      "CADCHF": { label: "CAD / CHF", basePrice: 0.66500, stepSize: 0.00011, decimals: 5, tvSymbol: "FX:CADCHF", unit: "cad" },
+      "CHFJPY": { label: "CHF / JPY", basePrice: 167.800, stepSize: 0.032, decimals: 3, tvSymbol: "FX:CHFJPY", unit: "chf" },
+      "NZDJPY": { label: "NZD / JPY", basePrice: 90.600, stepSize: 0.021, decimals: 3, tvSymbol: "FX:NZDJPY", unit: "nzd" },
+      "NZDCAD": { label: "NZD / CAD", basePrice: 0.81150, stepSize: 0.00014, decimals: 5, tvSymbol: "FX:NZDCAD", unit: "nzd" },
+      "NZDCHF": { label: "NZD / CHF", basePrice: 0.53950, stepSize: 0.00011, decimals: 5, tvSymbol: "FX:NZDCHF", unit: "nzd" },
+      // EXOTICS & REGIONALS
+      "USDTRY": { label: "USD / TRY (Turkey)", basePrice: 32.2400, stepSize: 0.0085, decimals: 4, tvSymbol: "FX:USDTRY", unit: "usd" },
+      "USDZAR": { label: "USD / ZAR (S. Africa)", basePrice: 18.9200, stepSize: 0.0045, decimals: 4, tvSymbol: "FX:USDZAR", unit: "usd" },
+      "USDMXN": { label: "USD / MXN (Mexico)", basePrice: 16.7400, stepSize: 0.0035, decimals: 4, tvSymbol: "FX:USDMXN", unit: "usd" },
+      "USDSGD": { label: "USD / SGD (Singapore)", basePrice: 1.34800, stepSize: 0.00022, decimals: 5, tvSymbol: "FX:USDSGD", unit: "usd" },
+      "USDHKD": { label: "USD / HKD (Hong Kong)", basePrice: 7.82400, stepSize: 0.00015, decimals: 5, tvSymbol: "FX:USDHKD", unit: "usd" },
+      "USDDKK": { label: "USD / DKK (Denmark)", basePrice: 6.9200, stepSize: 0.0015, decimals: 4, tvSymbol: "FX:USDDKK", unit: "usd" },
+      "USDNOK": { label: "USD / NOK (Norway)", basePrice: 10.7800, stepSize: 0.0025, decimals: 4, tvSymbol: "FX:USDNOK", unit: "usd" },
+      "USDSEK": { label: "USD / SEK (Sweden)", basePrice: 10.6400, stepSize: 0.0022, decimals: 4, tvSymbol: "FX:USDSEK", unit: "usd" },
+      "USDPLN": { label: "USD / PLN (Poland)", basePrice: 3.9800, stepSize: 0.0012, decimals: 4, tvSymbol: "FX:USDPLN", unit: "usd" },
+      "USDCNH": { label: "USD / CNH (China)", basePrice: 7.2450, stepSize: 0.0014, decimals: 4, tvSymbol: "FX:USDCNH", unit: "usd" },
+      "EURTRY": { label: "EUR / TRY", basePrice: 34.9500, stepSize: 0.0092, decimals: 4, tvSymbol: "FX:EURTRY", unit: "eur" },
+      "EURZAR": { label: "EUR / ZAR", basePrice: 20.5200, stepSize: 0.0055, decimals: 4, tvSymbol: "FX:EURZAR", unit: "eur" },
+      "EURMXN": { label: "EUR / MXN", basePrice: 18.1500, stepSize: 0.0038, decimals: 4, tvSymbol: "FX:EURMXN", unit: "eur" },
+      "EURSGD": { label: "EUR / SGD", basePrice: 1.46200, stepSize: 0.00025, decimals: 5, tvSymbol: "FX:EURSGD", unit: "eur" },
+      "EURSEK": { label: "EUR / SEK", basePrice: 11.5300, stepSize: 0.0028, decimals: 4, tvSymbol: "FX:EURSEK", unit: "eur" },
+      "EURNOK": { label: "EUR / NOK", basePrice: 11.6800, stepSize: 0.0031, decimals: 4, tvSymbol: "FX:EURNOK", unit: "eur" },
+      "GBPTRY": { label: "GBP / TRY", basePrice: 40.7500, stepSize: 0.0120, decimals: 4, tvSymbol: "FX:GBPTRY", unit: "gbp" },
+      "GBPZAR": { label: "GBP / ZAR", basePrice: 23.9100, stepSize: 0.0065, decimals: 4, tvSymbol: "FX:GBPZAR", unit: "gbp" },
+      "GBPMXN": { label: "GBP / MXN", basePrice: 21.1600, stepSize: 0.0048, decimals: 4, tvSymbol: "FX:GBPMXN", unit: "gbp" },
+      "GBPSGD": { label: "GBP / SGD", basePrice: 1.70300, stepSize: 0.00028, decimals: 5, tvSymbol: "FX:GBPSGD", unit: "gbp" },
+      "GBPSEK": { label: "GBP / SEK", basePrice: 13.4400, stepSize: 0.0032, decimals: 4, tvSymbol: "FX:GBPSEK", unit: "gbp" },
+      "AUDSGD": { label: "AUD / SGD", basePrice: 0.87900, stepSize: 0.00018, decimals: 5, tvSymbol: "FX:AUDSGD", unit: "aud" },
+
+      // === CRYPTOCURRENCIES (25+ COINS) ===
+      "BTC": { label: "BTC / USDT (Bitcoin)", basePrice: 96450.25, stepSize: 4.5, decimals: 2, tvSymbol: "BINANCE:BTCUSDT", unit: "btc" },
+      "ETH": { label: "ETH / USDT (Ethereum)", basePrice: 3120.50, stepSize: 0.35, decimals: 2, tvSymbol: "BINANCE:ETHUSDT", unit: "eth" },
+      "SOL": { label: "SOL / USDT (Solana)", basePrice: 184.25, stepSize: 0.05, decimals: 2, tvSymbol: "BINANCE:SOLUSDT", unit: "sol" },
+      "BNB": { label: "BNB / USDT (Binance)", basePrice: 592.80, stepSize: 0.15, decimals: 2, tvSymbol: "BINANCE:BNBUSDT", unit: "bnb" },
+      "XRP": { label: "XRP / USDT (Ripple)", basePrice: 0.5840, stepSize: 0.0008, decimals: 4, tvSymbol: "BINANCE:XRPUSDT", unit: "xrp" },
+      "ADA": { label: "ADA / USDT (Cardano)", basePrice: 0.4820, stepSize: 0.0006, decimals: 4, tvSymbol: "BINANCE:ADAUSDT", unit: "ada" },
+      "DOT": { label: "DOT / USDT (Polkadot)", basePrice: 6.850, stepSize: 0.015, decimals: 3, tvSymbol: "BINANCE:DOTUSDT", unit: "dot" },
+      "DOGE": { label: "DOGE / USDT (Dogecoin)", basePrice: 0.1420, stepSize: 0.0004, decimals: 4, tvSymbol: "BINANCE:DOGEUSDT", unit: "doge" },
+      "AVAX": { label: "AVAX / USDT (Avalanche)", basePrice: 34.60, stepSize: 0.08, decimals: 2, tvSymbol: "BINANCE:AVAXUSDT", unit: "avax" },
+      "LINK": { label: "LINK / USDT (Chainlink)", basePrice: 16.25, stepSize: 0.04, decimals: 2, tvSymbol: "BINANCE:LINKUSDT", unit: "link" },
+      "SHIB": { label: "SHIB / USDT (Shiba Inu)", basePrice: 0.000024, stepSize: 0.000001, decimals: 6, tvSymbol: "BINANCE:SHIBUSDT", unit: "shib" },
+      "MATIC": { label: "MATIC / USDT (Polygon)", basePrice: 0.685, stepSize: 0.002, decimals: 3, tvSymbol: "BINANCE:MATICUSDT", unit: "matic" },
+      "TON": { label: "TON / USDT (Toncoin)", basePrice: 7.25, stepSize: 0.02, decimals: 2, tvSymbol: "BINANCE:TONUSDT", unit: "ton" },
+      "UNI": { label: "UNI / USDT (Uniswap)", basePrice: 7.85, stepSize: 0.02, decimals: 2, tvSymbol: "BINANCE:UNIUSDT", unit: "uni" },
+      "LTC": { label: "LTC / USDT (Litecoin)", basePrice: 82.40, stepSize: 0.18, decimals: 2, tvSymbol: "BINANCE:LTCUSDT", unit: "ltc" },
+      "NEAR": { label: "NEAR / USDT (Near Protocol)", basePrice: 6.12, stepSize: 0.015, decimals: 3, tvSymbol: "BINANCE:NEARUSDT", unit: "near" },
+      "PEPE": { label: "PEPE / USDT (Pepe Coin)", basePrice: 0.000012, stepSize: 0.000001, decimals: 6, tvSymbol: "BINANCE:PEPEUSDT", unit: "pepe" },
+      "APT": { label: "APT / USDT (Aptos)", basePrice: 8.95, stepSize: 0.025, decimals: 2, tvSymbol: "BINANCE:APTUSDT", unit: "apt" },
+      "ICP": { label: "ICP / USDT (Internet Comp)", basePrice: 11.40, stepSize: 0.03, decimals: 2, tvSymbol: "BINANCE:ICPUSDT", unit: "icp" },
+      "RNDR": { label: "RNDR / USDT (Render)", basePrice: 8.20, stepSize: 0.02, decimals: 2, tvSymbol: "BINANCE:RNDRUSDT", unit: "rndr" },
+      "HBAR": { label: "HBAR / USDT (Hedera)", basePrice: 0.098, stepSize: 0.001, decimals: 3, tvSymbol: "BINANCE:HBARUSDT", unit: "hbar" },
+      "ATOM": { label: "ATOM / USDT (Cosmos)", basePrice: 8.45, stepSize: 0.02, decimals: 2, tvSymbol: "BINANCE:ATOMUSDT", unit: "atom" },
+      "STX": { label: "STX / USDT (Stacks)", basePrice: 1.95, stepSize: 0.005, decimals: 3, tvSymbol: "BINANCE:STXUSDT", unit: "stx" },
+      "IMX": { label: "IMX / USDT (Immutable)", basePrice: 2.15, stepSize: 0.005, decimals: 3, tvSymbol: "BINANCE:IMXUSDT", unit: "imx" },
+      "GRT": { label: "GRT / USDT (Graph)", basePrice: 0.284, stepSize: 0.001, decimals: 3, tvSymbol: "BINANCE:GRTUSDT", unit: "grt" },
+      "SUI": { label: "SUI / USDT (Sui)", basePrice: 1.14, stepSize: 0.005, decimals: 3, tvSymbol: "BINANCE:SUIUSDT", unit: "sui" },
+
+      // === COMMODITIES & INDICES (25+ MARKETS) ===
+      "XAUUSD": { label: "GOLD / USD (XAU)", basePrice: 2342.50, stepSize: 0.45, decimals: 2, tvSymbol: "TVC:GOLD", unit: "oz" },
+      "XAGUSD": { label: "SILVER / USD (XAG)", basePrice: 28.40, stepSize: 0.015, decimals: 2, tvSymbol: "TVC:SILVER", unit: "oz" },
+      "USOIL": { label: "Crude Oil (WTI)", basePrice: 78.25, stepSize: 0.03, decimals: 2, tvSymbol: "TVC:USOIL", unit: "bbl" },
+      "UKOIL": { label: "Brent Oil", basePrice: 82.60, stepSize: 0.03, decimals: 2, tvSymbol: "TVC:UKOIL", unit: "bbl" },
+      "NGAS": { label: "Natural Gas", basePrice: 2.450, stepSize: 0.008, decimals: 3, tvSymbol: "TVC:NATURALGAS", unit: "mmbtu" },
+      "US30": { label: "Dow Jones 30 Index", basePrice: 39120.0, stepSize: 2.5, decimals: 1, tvSymbol: "GLOBALPRIME:US30", unit: "idx" },
+      "SPX500": { label: "S&P 500 Index", basePrice: 5320.4, stepSize: 0.45, decimals: 1, tvSymbol: "GLOBALPRIME:SPX500", unit: "idx" },
+      "NAS100": { label: "Nasdaq 100 Index", basePrice: 18640.2, stepSize: 1.8, decimals: 1, tvSymbol: "GLOBALPRIME:NAS100", unit: "idx" },
+      "GER30": { label: "DAX 40 Index", basePrice: 18450.0, stepSize: 1.5, decimals: 1, tvSymbol: "GLOBALPRIME:GER40", unit: "idx" },
+      "UK100": { label: "FTSE 100 Index", basePrice: 8240.0, stepSize: 0.8, decimals: 1, tvSymbol: "GLOBALPRIME:UK100", unit: "idx" },
+      "JPN225": { label: "Nikkei 225 Index", basePrice: 38740.0, stepSize: 4.0, decimals: 0, tvSymbol: "GLOBALPRIME:JPN225", unit: "idx" },
+      "FRA40": { label: "CAC 40 Index", basePrice: 7980.0, stepSize: 0.8, decimals: 1, tvSymbol: "GLOBALPRIME:FRA40", unit: "idx" },
+      "AUS200": { label: "ASX 200 Index", basePrice: 7760.0, stepSize: 0.8, decimals: 1, tvSymbol: "GLOBALPRIME:AUS200", unit: "idx" },
+      "HK50": { label: "Hang Seng Index", basePrice: 18240.0, stepSize: 3.5, decimals: 0, tvSymbol: "GLOBALPRIME:HK50", unit: "idx" },
+      "COPPER": { label: "Copper Futures", basePrice: 4.620, stepSize: 0.002, decimals: 3, tvSymbol: "COMEX:HG1!", unit: "lbs" },
+      "PLATINUM": { label: "Platinum", basePrice: 985.40, stepSize: 0.25, decimals: 2, tvSymbol: "NYMEX:PL1!", unit: "oz" },
+      "PALLADIUM": { label: "Palladium", basePrice: 945.20, stepSize: 0.35, decimals: 2, tvSymbol: "NYMEX:PA1!", unit: "oz" },
+      "SOYBEAN": { label: "Soybeans", basePrice: 1184.50, stepSize: 0.25, decimals: 2, tvSymbol: "CBOT:ZS1!", unit: "bu" },
+      "CORN": { label: "Corn Futures", basePrice: 445.20, stepSize: 0.15, decimals: 2, tvSymbol: "CBOT:ZC1!", unit: "bu" },
+      "WHEAT": { label: "Wheat Futures", basePrice: 624.80, stepSize: 0.20, decimals: 2, tvSymbol: "CBOT:ZW1!", unit: "bu" },
+      "SUGAR": { label: "Sugar No. 11", basePrice: 18.64, stepSize: 0.02, decimals: 2, tvSymbol: "ICEUS:SB1!", unit: "lbs" },
+      "COFFEE": { label: "Coffee Arabica", basePrice: 224.50, stepSize: 0.15, decimals: 2, tvSymbol: "ICEUS:KC1!", unit: "lbs" },
+      "COCOA": { label: "Cocoa Futures", basePrice: 8450.0, stepSize: 4.5, decimals: 0, tvSymbol: "ICEUS:CC1!", unit: "mt" },
+      "COTTON": { label: "Cotton No. 2", basePrice: 74.20, stepSize: 0.05, decimals: 2, tvSymbol: "ICEUS:CT1!", unit: "lbs" },
+      "US2Y": { label: "US 2-Year Treasury Yield", basePrice: 4.882, stepSize: 0.002, decimals: 3, tvSymbol: "TVC:US02Y", unit: "pct" },
+      "US10Y": { label: "US 10-Year Treasury Yield", basePrice: 4.224, stepSize: 0.002, decimals: 3, tvSymbol: "TVC:US10Y", unit: "pct" }
+    };
+
+    let selectedToken = "BTC";
+    let coreGlobalPriceVal = marketAssetConfig[selectedToken].basePrice;
+    let activeTradeMode = "buy";
+    let currentWidgetInstance = null;
+
+    // Automated loop engine builds option structures directly to DOM without manual listing friction
+    function initializeAssetDropdownEngine() {
+      const selectBox = document.getElementById("asset-selector");
+      if(!selectBox) return;
+
+      let htmlBuffer = "";
+      for (const [key, config] of Object.entries(marketAssetConfig)) {
+        htmlBuffer += `<option value="${key}">${config.label}</option>`;
+      }
+      selectBox.innerHTML = htmlBuffer;
+      selectBox.value = selectedToken;
+    }
+
+    // Load or Swap TradingView Frame Component
+    function loadTradingViewWidget(symbolString) {
+      currentWidgetInstance = new TradingView.widget({
+        "width": "100%",
+        "height": "100%",
+        "symbol": symbolString,
+        "interval": "5",
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "en",
+        "toolbar_bg": "#131722",
+        "enable_publishing": false,
+        "hide_side_toolbar": true,
+        "allow_symbol_change": false,
+        "container_id": "tradingview_mobile_chart",
+        "studies": ["MASimple@tv-basicstudies"]
+      });
+    }
+
+    // Handles switching the active asset from the dynamic dropdown selector
+    function handleAssetChange(newToken) {
+      selectedToken = newToken;
+      const config = marketAssetConfig[selectedToken];
+      coreGlobalPriceVal = config.basePrice;
+      
+      // Update form data units instantly
+      document.getElementById("form-asset-token").textContent = config.unit;
+      document.getElementById("ob-size-header").textContent = `Size(${config.unit})`;
+
+      // Re-initialize core tracking variables
+      loadTradingViewWidget(config.tvSymbol);
+      buildMobileOrderbookStream();
+    }
+
+    function setTradeMode(mode) {
+      activeTradeMode = mode;
+      const buyTab = document.getElementById("tab-buy");
+      const sellTab = document.getElementById("tab-sell");
+      const actionBtn = document.getElementById("submit-order-btn");
+
+      if (mode === 'buy') {
+        buyTab.className = "tab-btn active-buy";
+        sellTab.className = "tab-btn";
+        actionBtn.className = "action-submit-btn";
+        actionBtn.textContent = "Buy Long";
+      } else {
+        buyTab.className = "tab-btn";
+        sellTab.className = "tab-btn active-sell";
+        actionBtn.className = "action-submit-btn sell-mode";
+        actionBtn.textContent = "Sell Short";
+      }
+    }
+
+    function buildMobileOrderbookStream() {
+      const askWrapper = document.getElementById("m-asks-container");
+      const bidWrapper = document.getElementById("m-bids-container");
+      if(!askWrapper || !bidWrapper) return;
+
+      askWrapper.innerHTML = "";
+      bidWrapper.innerHTML = "";
+      
+      const config = marketAssetConfig[selectedToken];
+
+      // Render 3 Asks (Sells Stack)
+      for(let i = 3; i > 0; i--) {
+        let price = coreGlobalPriceVal + (i * config.stepSize) + (Math.random() * (config.stepSize * 0.15));
+        let size = (Math.random() * 45 + 1.2).toFixed(config.decimals > 4 ? 2 : 1);
+        askWrapper.innerHTML += `
+          <div class="ob-row-mobile">
+            <span class="ob-price-lbl color-down">${price.toFixed(config.decimals)}</span>
+            <span class="ob-amt-lbl">${size}</span>
+          </div>
+        `;
+      }
+
+      // Render 3 Bids (Buys Stack)
+      for(let i = 1; i <= 3; i++) {
+        let price = coreGlobalPriceVal - (i * config.stepSize) - (Math.random() * (config.stepSize * 0.15));
+        let size = (Math.random() * 45 + 1.2).toFixed(config.decimals > 4 ? 2 : 1);
+        bidWrapper.innerHTML += `
+          <div class="ob-row-mobile">
+            <span class="ob-price-lbl color-up">${price.toFixed(config.decimals)}</span>
+            <span class="ob-amt-lbl">${size}</span>
+          </div>
+        `;
+      }
+    }
+
+    function stepFluctuationTickLoop() {
+      const config = marketAssetConfig[selectedToken];
+      const variance = (Math.random() * config.stepSize * 2) - config.stepSize;
+      coreGlobalPriceVal += variance;
+
+      const elementPriceHead = document.getElementById("m-live-price");
+      const elementPriceSpread = document.getElementById("m-spread-price");
+      const elementInputPrice = document.getElementById("form-price-val");
+
+      if(elementPriceHead && elementPriceSpread) {
+        elementPriceHead.textContent = coreGlobalPriceVal.toFixed(config.decimals);
+        elementPriceSpread.textContent = coreGlobalPriceVal.toFixed(config.decimals);
+        if(elementInputPrice) elementInputPrice.value = coreGlobalPriceVal.toFixed(config.decimals);
+
+        if(variance > 0) {
+          elementPriceHead.className = "live-price-badge color-up";
+          elementPriceSpread.className = "mid-spread-strip color-up";
+        } else {
+          elementPriceHead.className = "live-price-badge color-down";
+          elementPriceSpread.className = "mid-spread-strip color-down";
+        }
+      }
+
+      buildMobileOrderbookStream();
+      setTimeout(stepFluctuationTickLoop, Math.floor(Math.random() * 900) + 700);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initializeAssetDropdownEngine();
+      const config = marketAssetConfig[selectedToken];
+      
+      // Seed default structural content fields
+      document.getElementById("form-asset-token").textContent = config.unit;
+      document.getElementById("ob-size-header").textContent = `Size(${config.unit})`;
+      
+      loadTradingViewWidget(config.tvSymbol);
+      buildMobileOrderbookStream();
+      setTimeout(stepFluctuationTickLoop, 1000);
+    });
+  </script>
+</body>
+</html>
